@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services & Fabrics | Atelier Vogue Tailoring Studio</title>
+  <meta name="description" content="Explore bespoke tailoring services, fabric selection vaults, pattern drafting, and custom dress stitching.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: '#0a0a0a',
+              card: '#121212',
+              gold: '#d4af37',
+              goldHover: '#b89628',
+              muted: '#8e8e93'
+            }
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Light Mode Overrides */
+    html:not(.dark) body {
+      background-color: #fcfbf7;
+      color: #1a1a1a;
+    }
+    html:not(.dark) header {
+      background-color: rgba(255, 255, 255, 0.92);
+      border-color: #e5e7eb;
+    }
+    html:not(.dark) .bg-brand-card {
+      background-color: #ffffff;
+      border-color: #e5e7eb;
+    }
+    html:not(.dark) .bg-neutral-950 {
+      background-color: #f4f3ef;
+    }
+    html:not(.dark) .text-white {
+      color: #0d0d0d;
+    }
+    html:not(.dark) .text-neutral-300, html:not(.dark) .text-neutral-400 {
+      color: #4a4a4a;
+    }
+    html:not(.dark) footer {
+      background-color: #f4f3ef;
+      border-color: #e5e7eb;
+    }
+    html:not(.dark) .bg-neutral-900 {
+      background-color: #eae8e1;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-brand-black text-neutral-100 font-sans selection:bg-brand-gold selection:text-black flex flex-col justify-between transition-colors duration-300">
+
+  <!-- GLOBAL HEADER / NAVBAR (SINGLE LINE LAYOUT) -->
+  <header class="fixed top-0 left-0 right-0 z-50 border-b border-neutral-800/80 bg-brand-black/90 backdrop-blur-md transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo (Single Line) -->
+        <a href="index.html" class="flex items-center gap-3 shrink-0">
+          <div class="w-9 h-9 border border-brand-gold text-brand-gold flex items-center justify-center rounded-full font-serif font-bold text-base shrink-0">
+            V
+          </div>
+          <div class="flex flex-col whitespace-nowrap">
+            <span class="font-serif text-base sm:text-lg font-bold uppercase tracking-widest text-white leading-none">Atelier Vogue</span>
+            <span class="text-[8px] tracking-[0.3em] text-brand-gold uppercase font-semibold mt-1">Bespoke Tailoring</span>
+          </div>
+        </a>
+
+        <!-- Navigation Links (Strictly Single Line) -->
+        <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-[11px] font-semibold uppercase tracking-widest text-neutral-300 whitespace-nowrap">
+          
+          <!-- Home Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center gap-1.5 text-neutral-300 hover:text-brand-gold focus:outline-none py-2 transition-colors">
+              <span>Home</span>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180"></i>
+            </button>
+            <div class="absolute left-0 top-full hidden group-hover:block w-52 bg-brand-card border border-neutral-800 rounded-2xl shadow-2xl p-2 space-y-1">
+              <a href="index.html" class="block px-3 py-2 rounded-xl text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 transition-colors">Home 1 (Classic)</a>
+              <a href="index2.html" class="block px-3 py-2 rounded-xl text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 transition-colors">Home 2 (Premium Luxury)</a>
+            </div>
+          </div>
+
+          <a href="services.html" class="text-brand-gold font-bold py-2 whitespace-nowrap">Services & Fabrics</a>
+          <a href="booking.html" class="hover:text-brand-gold transition-colors py-2 whitespace-nowrap">Book Fitting</a>
+          <a href="about.html" class="hover:text-brand-gold transition-colors py-2 whitespace-nowrap">About Us</a>
+          <a href="contact.html" class="hover:text-brand-gold transition-colors py-2 whitespace-nowrap">Contact</a>
+          <a href="admin.html" class="hover:text-brand-gold transition-colors text-neutral-400 py-2 whitespace-nowrap">Admin Portal</a>
+        </nav>
+
+        <!-- Right Action Controls -->
+        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          
+          <!-- Dark / Light Mode Toggle -->
+          <button id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Theme" 
+                  class="w-9 h-9 rounded-full border border-neutral-800 bg-neutral-900 flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all shrink-0">
+            <i data-lucide="sun" id="sunIcon" class="w-4 h-4 hidden"></i>
+            <i data-lucide="moon" id="moonIcon" class="w-4 h-4"></i>
+          </button>
+
+          <!-- RTL Layout Toggle -->
+          <button id="rtlToggle" onclick="toggleRTL()" title="Toggle Right-To-Left Layout" aria-label="Toggle RTL" 
+                  class="w-9 h-9 rounded-full border border-neutral-800 bg-neutral-900 flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all shrink-0">
+            <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+          </button>
+
+          <!-- Booking Button -->
+          <a href="booking.html" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-[11px] font-bold uppercase tracking-wider bg-brand-gold text-black hover:bg-brand-goldHover rounded-full transition-all shadow-md shadow-brand-gold/10 whitespace-nowrap shrink-0">
+            Book Appointment
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="pt-36 pb-20 relative overflow-hidden bg-cover bg-center bg-no-repeat"
+           style="background-image: linear-gradient(180deg, rgba(10, 10, 10, 0.85) 0%, rgba(10, 10, 10, 0.98) 100%), url('https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=1920&auto=format&fit=crop');">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10 space-y-4">
+      <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-brand-gold border border-brand-gold/40 bg-brand-gold/10 px-4 py-1.5 rounded-full inline-block backdrop-blur-sm">
+        Tailoring & Textiles Catalog
+      </span>
+      <h1 class="font-serif text-4xl sm:text-6xl font-extrabold uppercase tracking-wide text-white">
+        Services & Fabric Vault
+      </h1>
+      <p class="text-neutral-300 text-sm max-w-2xl mx-auto font-light leading-relaxed">
+        From bespoke pattern drafting to private consultations with our fabric masters. Discover our complete menu of tailoring solutions.
+      </p>
+    </div>
+  </section>
+
+  <!-- TAILORING SERVICES SECTION -->
+  <section class="py-20 bg-brand-black transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
+      
+      <div class="text-center max-w-xl mx-auto space-y-2">
+        <span class="text-[10px] font-mono uppercase tracking-[0.25em] text-brand-gold">Precision Craftsmanship</span>
+        <h2 class="font-serif text-3xl font-bold uppercase text-white">Custom Stitching Services</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Service Card 1 -->
+        <div class="bg-brand-card border border-neutral-800 rounded-3xl p-8 space-y-4 hover:border-brand-gold/40 transition-all flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 text-brand-gold flex items-center justify-center">
+              <i data-lucide="scissors" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold uppercase text-white">Bespoke Suit Tailoring</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed">Full custom canvas constructions, hand-stitched lapels, horn buttons, and personalized inner lining monogramming.</p>
+          </div>
+          <div class="pt-4 border-t border-neutral-800/80 flex justify-between items-center text-xs">
+            <span class="text-brand-gold font-semibold">Starting from $850</span>
+            <a href="booking.html" class="hover:text-white text-neutral-400 transition-colors">Book Fitting &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Service Card 2 -->
+        <div class="bg-brand-card border border-neutral-800 rounded-3xl p-8 space-y-4 hover:border-brand-gold/40 transition-all flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 text-brand-gold flex items-center justify-center">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold uppercase text-white">Bridal & Evening Gowns</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed">Intricate beadwork, custom corsetry, delicate embroidery, and exact draping designed specifically for your silhouette.</p>
+          </div>
+          <div class="pt-4 border-t border-neutral-800/80 flex justify-between items-center text-xs">
+            <span class="text-brand-gold font-semibold">Starting from $1,200</span>
+            <a href="booking.html" class="hover:text-white text-neutral-400 transition-colors">Book Fitting &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Service Card 3 -->
+        <div class="bg-brand-card border border-neutral-800 rounded-3xl p-8 space-y-4 hover:border-brand-gold/40 transition-all flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 text-brand-gold flex items-center justify-center">
+              <i data-lucide="ruler" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold uppercase text-white">Master Tailor Alterations</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed">Garment restructuring, coat relining, shoulder adjustments, and pant tapering by expert senior tailors.</p>
+          </div>
+          <div class="pt-4 border-t border-neutral-800/80 flex justify-between items-center text-xs">
+            <span class="text-brand-gold font-semibold">Starting from $45</span>
+            <a href="booking.html" class="hover:text-white text-neutral-400 transition-colors">Book Fitting &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FABRIC VAULT SECTION -->
+  <section class="py-20 bg-neutral-950 border-t border-neutral-800/80 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
+      
+      <div class="text-center max-w-xl mx-auto space-y-2">
+        <span class="text-[10px] font-mono uppercase tracking-[0.25em] text-brand-gold">Luxury Textiles</span>
+        <h2 class="font-serif text-3xl font-bold uppercase text-white">The Fabric Collection</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Fabric 1 -->
+        <div class="bg-brand-card border border-neutral-800 rounded-2xl overflow-hidden group hover:border-brand-gold/40 transition-all">
+          <div class="h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?q=80&w=800&auto=format&fit=crop" 
+                 alt="Italian Wool" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-5 space-y-2">
+            <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider block">Super 150s & 180s</span>
+            <h4 class="font-serif font-bold uppercase text-white text-base">Italian Worsted Wool</h4>
+            <p class="text-xs text-neutral-400 leading-relaxed">Breathable, soft, and naturally wrinkle-resistant woven in Biella, Italy.</p>
+          </div>
+        </div>
+
+        <!-- Fabric 2 -->
+        <div class="bg-brand-card border border-neutral-800 rounded-2xl overflow-hidden group hover:border-brand-gold/40 transition-all">
+          <div class="h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop" 
+                 alt="Mulberry Silk" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-5 space-y-2">
+            <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider block">100% Pure Organic</span>
+            <h4 class="font-serif font-bold uppercase text-white text-base">Mulberry Silk Satin</h4>
+            <p class="text-xs text-neutral-400 leading-relaxed">Ultra-luminous drape ideal for evening gowns, lapel facings, and linings.</p>
+          </div>
+        </div>
+
+        <!-- Fabric 3 -->
+        <div class="bg-brand-card border border-neutral-800 rounded-2xl overflow-hidden group hover:border-brand-gold/40 transition-all">
+          <div class="h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=800&auto=format&fit=crop" 
+                 alt="Cashmere Blend" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-5 space-y-2">
+            <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider block">Winter Collection</span>
+            <h4 class="font-serif font-bold uppercase text-white text-base">Mongolian Cashmere</h4>
+            <p class="text-xs text-neutral-400 leading-relaxed">Unrivaled warmth and insulation for luxury bespoke overcoats and blazers.</p>
+          </div>
+        </div>
+
+        <!-- Fabric 4 -->
+        <div class="bg-brand-card border border-neutral-800 rounded-2xl overflow-hidden group hover:border-brand-gold/40 transition-all">
+          <div class="h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=800&auto=format&fit=crop" 
+                 alt="Egyptian Cotton" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-5 space-y-2">
+            <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider block">Giza Two-Ply</span>
+            <h4 class="font-serif font-bold uppercase text-white text-base">Egyptian Cotton</h4>
+            <p class="text-xs text-neutral-400 leading-relaxed">Crisp, durable, and exceptionally soft weave for custom formal dress shirts.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LUXURY FOOTER -->
+  <footer class="bg-brand-card border-t border-neutral-800 pt-16 pb-12 text-xs text-neutral-400 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 border-b border-neutral-800 pb-12">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="lg:col-span-2 space-y-4">
+          <a href="index.html" class="flex items-center gap-3">
+            <div class="w-8 h-8 border border-brand-gold text-brand-gold flex items-center justify-center rounded-full font-serif font-bold text-sm">
+              V
+            </div>
+            <span class="font-serif text-lg font-bold uppercase tracking-widest text-white">Atelier Vogue</span>
+          </a>
+          <p class="text-neutral-400 text-xs leading-relaxed max-w-sm">
+            Bespoke tailoring, dress stitching, and custom couture. Crafting flawless fits with individual pattern drafting and hand finishing.
+          </p>
+
+          <!-- SVG Social Icons -->
+          <div class="flex gap-4 pt-2">
+            <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-brand-gold hover:border-brand-gold/50 transition-all">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+            <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-brand-gold hover:border-brand-gold/50 transition-all">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z"/>
+              </svg>
+            </a>
+            <a href="tel:+1234567890" aria-label="Phone" class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-brand-gold hover:border-brand-gold/50 transition-all">
+              <i data-lucide="phone" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 2: Navigation -->
+        <div class="space-y-3">
+          <span class="font-serif text-white font-bold uppercase tracking-wider block">Quick Links</span>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="hover:text-brand-gold transition-colors">Home 1 (Classic)</a></li>
+            <li><a href="index2.html" class="hover:text-brand-gold transition-colors">Home 2 (Premium Luxury)</a></li>
+            <li><a href="services.html" class="hover:text-brand-gold transition-colors">Services & Fabrics</a></li>
+            <li><a href="booking.html" class="hover:text-brand-gold transition-colors">Book Appointment</a></li>
+            <li><a href="about.html" class="hover:text-brand-gold transition-colors">About Atelier</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Portals -->
+        <div class="space-y-3">
+          <span class="font-serif text-white font-bold uppercase tracking-wider block">Access Portals</span>
+          <ul class="space-y-2">
+            <li><a href="login.html" class="hover:text-brand-gold transition-colors">Client Login</a></li>
+            <li><a href="admin.html" class="hover:text-brand-gold transition-colors">Admin Dashboard</a></li>
+            <li><a href="contact.html" class="hover:text-brand-gold transition-colors">Support & Contact</a></li>
+            <li><a href="coming-soon.html" class="hover:text-brand-gold transition-colors">Pre-Launch Page</a></li>
+            <li><a href="404.html" class="hover:text-brand-gold transition-colors">404 Error Page</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Studio Hours -->
+        <div class="space-y-3">
+          <span class="font-serif text-white font-bold uppercase tracking-wider block">Studio Hours</span>
+          <div class="space-y-1.5 text-neutral-400 text-[11px]">
+            <p><strong class="text-white font-normal">Mon - Fri:</strong> 09:00 AM - 07:00 PM</p>
+            <p><strong class="text-white font-normal">Saturday:</strong> 10:00 AM - 05:00 PM</p>
+            <p><strong class="text-white font-normal">Sunday:</strong> By VIP Appointment</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright Bar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-neutral-500">
+        <p>&copy; 2026 Atelier Vogue Bespoke Tailoring. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-brand-gold transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-brand-gold transition-colors">Terms of Fitting</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT FOR THEME & RTL CONTROLS -->
+  <script>
+    lucide.createIcons();
+
+    // Dark / Light Mode Logic
+    function toggleTheme() {
+      const html = document.documentElement;
+      const sunIcon = document.getElementById('sunIcon');
+      const moonIcon = document.getElementById('moonIcon');
+
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        html.classList.add('dark');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      }
+    }
+
+    // RTL Layout Toggle Logic
+    function toggleRTL() {
+      const html = document.documentElement;
+      if (html.getAttribute('dir') === 'rtl') {
+        html.setAttribute('dir', 'ltr');
+      } else {
+        html.setAttribute('dir', 'rtl');
+      }
+    }
+  </script>
+</body>
+</html>

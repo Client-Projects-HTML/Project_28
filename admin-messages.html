@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Messages | Atelier Vogue Admin</title>
+  
+  <!-- Security Check -->
+  <script>
+    if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 
+            brand: { black: '#0a0a0a', card: '#121212', border: '#222222', gold: '#d4af37', goldHover: '#b89628' } 
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex overflow-x-hidden">
+
+  <!-- 1. LEFT SIDEBAR -->
+  <aside class="w-64 bg-brand-card border-r border-brand-border flex flex-col justify-between shrink-0 min-h-screen">
+    <div class="p-6 space-y-8">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10">V</div>
+        <div>
+          <span class="font-serif font-bold text-sm tracking-widest text-white uppercase block leading-none">Atelier Vogue</span>
+          <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider">Admin Portal</span>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="space-y-2 text-xs font-medium">
+        <a href="admin.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="admin-customers.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Customers</span>
+        </a>
+        <!-- ACTIVE PAGE LINK -->
+        <a href="admin-messages.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-gold text-black font-bold shadow-lg shadow-brand-gold/10 transition-all">
+          <i data-lucide="message-square" class="w-4 h-4"></i>
+          <span>Messages</span>
+        </a>
+        <a href="admin-orders.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span>Orders</span>
+        </a>
+        <a href="#" onclick="alert('Settings module active.')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Logout Action -->
+    <div class="p-6 border-t border-brand-border">
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-neutral-800 hover:border-brand-gold text-neutral-300 hover:text-brand-gold text-xs font-bold uppercase tracking-wider transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 2. MAIN CONTENT AREA -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="h-20 border-b border-brand-border px-8 flex items-center justify-between gap-4 bg-brand-black/80 backdrop-blur-md sticky top-0 z-40 shrink-0">
+      <div class="flex items-center gap-4 flex-1 max-w-md">
+        <div class="relative w-full">
+          <input type="text" id="msgSearchInput" onkeyup="filterConversations()" placeholder="Search conversations or messages..." class="w-full bg-brand-card border border-brand-border rounded-full py-2.5 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-brand-gold transition-all">
+          <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute left-3.5 top-3"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="alert('Notifications cleared.')" class="w-9 h-9 rounded-full bg-neutral-900 border border-brand-border flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+        </button>
+
+        <div class="flex items-center gap-3 pl-3 border-l border-brand-border">
+          <div class="w-9 h-9 rounded-full bg-brand-gold text-black flex items-center justify-center font-bold text-xs font-serif">AV</div>
+          <div class="hidden sm:block text-left">
+            <span class="text-xs font-bold text-white block leading-none">Master Director</span>
+            <span class="text-[9px] text-neutral-500">admin@ateliervogue.com</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MESSAGES CONCIERGE INTERFACE -->
+    <div class="flex-1 flex overflow-hidden">
+      
+      <!-- INBOX THREAD LIST -->
+      <div class="w-80 border-r border-brand-border bg-brand-card flex flex-col shrink-0">
+        <div class="p-4 border-b border-brand-border flex justify-between items-center">
+          <h2 class="font-serif font-bold text-sm uppercase text-white">Client Threads</h2>
+          <span id="unreadCount" class="text-[10px] font-mono bg-brand-gold/10 text-brand-gold border border-brand-gold/30 px-2 py-0.5 rounded-full">2 Unread</span>
+        </div>
+
+        <div class="flex-1 overflow-y-auto divide-y divide-brand-border/40" id="threadsContainer">
+          <!-- Dynamically Generated Threads -->
+        </div>
+      </div>
+
+      <!-- ACTIVE CHAT WINDOW -->
+      <div class="flex-1 flex flex-col bg-brand-black">
+        
+        <!-- Active Client Header -->
+        <div class="h-16 border-b border-brand-border px-6 flex items-center justify-between bg-brand-card/50 shrink-0">
+          <div class="flex items-center gap-3">
+            <div id="activeAvatar" class="w-9 h-9 rounded-full bg-brand-gold text-black flex items-center justify-center font-bold font-serif text-sm">
+              MV
+            </div>
+            <div>
+              <h3 id="activeClientName" class="font-serif font-bold text-sm text-white">Marcus Vance</h3>
+              <span id="activeClientMeta" class="text-[10px] font-mono text-neutral-400">Bespoke VIP • Commission #4029</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="alert('Viewing client profile archive.')" class="p-2 text-neutral-400 hover:text-brand-gold rounded-full transition-all">
+              <i data-lucide="user" class="w-4 h-4"></i>
+            </button>
+            <button onclick="alert('Thread archived.')" class="p-2 text-neutral-400 hover:text-white rounded-full transition-all">
+              <i data-lucide="archive" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Message Body Stream -->
+        <div class="flex-1 p-6 overflow-y-auto space-y-4" id="chatStream">
+          <!-- Dynamically Injected Messages -->
+        </div>
+
+        <!-- Reply Input Bar -->
+        <div class="p-4 border-t border-brand-border bg-brand-card shrink-0">
+          <form onsubmit="handleSendMessage(event)" class="flex items-center gap-3">
+            <input type="text" id="replyInput" placeholder="Type your concierge reply..." class="flex-1 bg-brand-black border border-brand-border rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-brand-gold transition-all">
+            <button type="submit" class="px-5 py-3 bg-brand-gold hover:bg-brand-goldHover text-black text-xs font-bold uppercase rounded-2xl flex items-center gap-2 transition-all">
+              <span>Send</span>
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // MESSAGE DATASTORE
+    const conversations = [
+      {
+        id: 1,
+        name: "Marcus Vance",
+        initials: "MV",
+        meta: "Bespoke VIP • Commission #4029",
+        lastMsg: "Could we push back my fitting appointment tomorrow by an hour?",
+        time: "10:42 AM",
+        unread: true,
+        messages: [
+          { sender: "client", text: "Good morning Atelier Vogue team. Regarding my Velvet Dinner Jacket fitting.", time: "10:40 AM" },
+          { sender: "client", text: "Could we push back my fitting appointment tomorrow by an hour?", time: "10:42 AM" }
+        ]
+      },
+      {
+        id: 2,
+        name: "Lord Harrison Sterling",
+        initials: "HS",
+        meta: "Master VIP • Commission #3988",
+        lastMsg: "The lapel stitching on the new overcoat draft looks exceptional.",
+        time: "Yesterday",
+        unread: true,
+        messages: [
+          { sender: "client", text: "The lapel stitching on the new overcoat draft looks exceptional.", time: "Yesterday" },
+          { sender: "admin", text: "Thank you Lord Sterling. Master cutter Giovanni completed the hand-felling this afternoon.", time: "Yesterday" }
+        ]
+      },
+      {
+        id: 3,
+        name: "Julian Thorne",
+        initials: "JT",
+        meta: "Standard • Commission #4102",
+        lastMsg: "Thank you for confirming the deposit received.",
+        time: "2 days ago",
+        unread: false,
+        messages: [
+          { sender: "admin", text: "We have received your deposit for the Silk Peak-Lapel Suit.", time: "2 days ago" },
+          { sender: "client", text: "Thank you for confirming the deposit received.", time: "2 days ago" }
+        ]
+      }
+    ];
+
+    let activeThreadId = 1;
+
+    function renderThreads(filter = "") {
+      const container = document.getElementById('threadsContainer');
+      const filtered = conversations.filter(c => 
+        c.name.toLowerCase().includes(filter.toLowerCase()) || 
+        c.lastMsg.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      container.innerHTML = filtered.map(c => `
+        <div onclick="selectThread(${c.id})" class="p-4 cursor-pointer transition-all ${c.id === activeThreadId ? 'bg-neutral-900 border-l-2 border-brand-gold' : 'hover:bg-neutral-900/50'}">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-xs text-white">${c.name}</span>
+            <span class="text-[9px] font-mono text-neutral-500">${c.time}</span>
+          </div>
+          <p class="text-[11px] text-neutral-400 truncate">${c.lastMsg}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderChat() {
+      const activeThread = conversations.find(c => c.id === activeThreadId);
+      if (!activeThread) return;
+
+      document.getElementById('activeClientName').innerText = activeThread.name;
+      document.getElementById('activeClientMeta').innerText = activeThread.meta;
+      document.getElementById('activeAvatar').innerText = activeThread.initials;
+
+      const chatStream = document.getElementById('chatStream');
+      chatStream.innerHTML = activeThread.messages.map(m => `
+        <div class="flex flex-col ${m.sender === 'admin' ? 'items-end' : 'items-start'}">
+          <div class="max-w-md rounded-2xl px-4 py-3 text-xs ${m.sender === 'admin' ? 'bg-brand-gold text-black font-medium' : 'bg-brand-card border border-brand-border text-neutral-200'}">
+            ${m.text}
+          </div>
+          <span class="text-[9px] font-mono text-neutral-500 mt-1 px-1">${m.time}</span>
+        </div>
+      `).join('');
+
+      chatStream.scrollTop = chatStream.scrollHeight;
+    }
+
+    function selectThread(id) {
+      activeThreadId = id;
+      const thread = conversations.find(c => c.id === id);
+      if (thread) thread.unread = false;
+      renderThreads();
+      renderChat();
+    }
+
+    function handleSendMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('replyInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const activeThread = conversations.find(c => c.id === activeThreadId);
+      if (activeThread) {
+        activeThread.messages.push({
+          sender: 'admin',
+          text: text,
+          time: 'Just now'
+        });
+        activeThread.lastMsg = text;
+        activeThread.time = 'Just now';
+      }
+
+      input.value = '';
+      renderThreads();
+      renderChat();
+    }
+
+    function filterConversations() {
+      const q = document.getElementById('msgSearchInput').value;
+      renderThreads(q);
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // INITIAL RENDER
+    renderThreads();
+    renderChat();
+  </script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Directory | Atelier Vogue Admin</title>
+  
+  <!-- Security Check (Ensures authenticated session) -->
+  <script>
+    if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 
+            brand: { black: '#0a0a0a', card: '#121212', border: '#222222', gold: '#d4af37', goldHover: '#b89628' } 
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex overflow-x-hidden">
+
+  <!-- 1. LEFT SIDEBAR -->
+  <aside class="w-64 bg-brand-card border-r border-brand-border flex flex-col justify-between shrink-0 min-h-screen">
+    <div class="p-6 space-y-8">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10">V</div>
+        <div>
+          <span class="font-serif font-bold text-sm tracking-widest text-white uppercase block leading-none">Atelier Vogue</span>
+          <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider">Admin Portal</span>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="space-y-2 text-xs font-medium">
+        <a href="admin.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="admin-customers.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-gold text-black font-bold shadow-lg shadow-brand-gold/10 transition-all">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Customers</span>
+        </a>
+        <a href="admin-messages.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="message-square" class="w-4 h-4"></i>
+          <span>Messages</span>
+        </a>
+        <!-- REPLACED HELP WITH ORDERS -->
+        <a href="admin-orders.html" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span>Orders</span>
+        </a>
+        <a href="#" onclick="alert('Settings module active.')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Logout Action -->
+    <div class="p-6 border-t border-brand-border">
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-neutral-800 hover:border-brand-gold text-neutral-300 hover:text-brand-gold text-xs font-bold uppercase tracking-wider transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 2. MAIN CONTENT AREA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="h-20 border-b border-brand-border px-8 flex items-center justify-between gap-4 bg-brand-black/80 backdrop-blur-md sticky top-0 z-40">
+      <div class="flex items-center gap-4 flex-1 max-w-md">
+        <div class="relative w-full">
+          <!-- Filter input for customer directory -->
+          <input type="text" id="customerSearch" onkeyup="filterCustomers()" placeholder="Search client name, tier, or email..." class="w-full bg-brand-card border border-brand-border rounded-full py-2.5 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-brand-gold transition-all">
+          <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute left-3.5 top-3"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="alert('Notifications cleared.')" class="w-9 h-9 rounded-full bg-neutral-900 border border-brand-border flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+        </button>
+
+        <div class="flex items-center gap-3 pl-3 border-l border-brand-border">
+          <div class="w-9 h-9 rounded-full bg-brand-gold text-black flex items-center justify-center font-bold text-xs font-serif">AV</div>
+          <div class="hidden sm:block text-left">
+            <span class="text-xs font-bold text-white block leading-none">Master Director</span>
+            <span class="text-[9px] text-neutral-500">admin@ateliervogue.com</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CUSTOMER PAGE CONTENT -->
+    <main class="p-8 space-y-8 overflow-y-auto">
+
+      <!-- PAGE TITLE & SUMMARY STATS -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] font-mono text-brand-gold uppercase tracking-widest">Client Records & Measurements</span>
+          <h1 class="font-serif text-2xl sm:text-3xl font-bold uppercase text-white mt-1">Customer Directory</h1>
+        </div>
+
+        <button onclick="openAddClientModal()" class="inline-flex items-center gap-2 px-5 py-3 bg-brand-gold hover:bg-brand-goldHover text-black text-xs font-bold uppercase rounded-full shadow-lg transition-all">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          <span>Add New Client</span>
+        </button>
+      </div>
+
+      <!-- METRIC SUMMARY CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">142</span>
+            <span class="text-xs text-neutral-400 uppercase tracking-wider font-medium">Total Registered Clients</span>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 text-brand-gold flex items-center justify-center">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">38</span>
+            <span class="text-xs text-neutral-400 uppercase tracking-wider font-medium">Bespoke VIP Members</span>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-brand-gold text-black flex items-center justify-center">
+            <i data-lucide="crown" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">12</span>
+            <span class="text-xs text-neutral-400 uppercase tracking-wider font-medium">Fittings Scheduled</span>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 text-brand-gold flex items-center justify-center">
+            <i data-lucide="calendar" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS TABLE -->
+      <div class="bg-brand-card border border-brand-border rounded-3xl p-6 space-y-6 shadow-xl">
+        <div class="flex items-center justify-between">
+          <h3 class="font-serif text-lg font-bold text-white uppercase">Client Roster</h3>
+          <span class="text-xs font-mono text-neutral-400">Showing 4 profiles</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-neutral-300" id="customersTable">
+            <thead class="border-b border-brand-border font-serif uppercase text-neutral-400 text-[10px] tracking-wider">
+              <tr>
+                <th class="pb-3">Client Profile</th>
+                <th class="pb-3">Tier</th>
+                <th class="pb-3">Commissions</th>
+                <th class="pb-3">Total Spend</th>
+                <th class="pb-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-brand-border/60" id="customersBody">
+              <!-- Rendered Dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- CLIENT DETAIL / EDIT MODAL -->
+  <div id="customerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-brand-border max-w-lg w-full rounded-3xl p-6 sm:p-8 space-y-6 relative shadow-2xl">
+      <button onclick="closeCustomerModal()" class="absolute top-6 right-6 text-neutral-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      
+      <div>
+        <span class="text-[10px] font-mono text-brand-gold uppercase tracking-widest">Client Profile Archive</span>
+        <h3 id="modalName" class="font-serif text-2xl font-bold uppercase text-white mt-1">Client Details</h3>
+      </div>
+
+      <div id="modalDetails" class="text-xs text-neutral-300 space-y-4">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="pt-4 border-t border-brand-border flex justify-end gap-3">
+        <button onclick="closeCustomerModal()" class="px-5 py-2.5 border border-neutral-700 text-neutral-300 hover:text-white rounded-full text-xs uppercase font-bold">Close</button>
+        <button onclick="alert('Updated Client Record Saved.'); closeCustomerModal();" class="px-5 py-2.5 bg-brand-gold text-black rounded-full text-xs uppercase font-bold hover:bg-brand-goldHover">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // CUSTOMER DATASET
+    const customersData = [
+      {
+        id: 1,
+        name: "Marcus Vance",
+        email: "m.vance@vanceholdings.com",
+        tier: "Bespoke VIP",
+        orders: 8,
+        spend: "$18,400",
+        chest: "42R",
+        waist: "34W",
+        sleeve: "33.5 L"
+      },
+      {
+        id: 2,
+        name: "Lord Harrison Sterling",
+        email: "h.sterling@sterlinghouse.co.uk",
+        tier: "Master VIP",
+        orders: 14,
+        spend: "$34,100",
+        chest: "40R",
+        waist: "32W",
+        sleeve: "32.0 L"
+      },
+      {
+        id: 3,
+        name: "Julian Thorne",
+        email: "j.thorne@thornecapital.com",
+        tier: "Standard",
+        orders: 2,
+        spend: "$3,800",
+        chest: "38S",
+        waist: "30W",
+        sleeve: "31.0 L"
+      },
+      {
+        id: 4,
+        name: "Alexander Wright",
+        email: "a.wright@wrightmedia.org",
+        tier: "Bespoke VIP",
+        orders: 5,
+        spend: "$11,200",
+        chest: "44L",
+        waist: "36W",
+        sleeve: "35.0 L"
+      }
+    ];
+
+    function renderCustomers(data) {
+      const tbody = document.getElementById('customersBody');
+      tbody.innerHTML = data.map(c => `
+        <tr class="hover:bg-neutral-900/50 transition-all">
+          <td class="py-3.5">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-brand-gold/10 text-brand-gold border border-brand-gold/20 flex items-center justify-center font-bold font-serif text-xs">
+                ${c.name.charAt(0)}
+              </div>
+              <div>
+                <span class="font-semibold text-white block leading-none">${c.name}</span>
+                <span class="text-[10px] text-neutral-500 font-mono">${c.email}</span>
+              </div>
+            </div>
+          </td>
+          <td class="py-3.5">
+            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${c.tier.includes('VIP') ? 'bg-brand-gold/10 text-brand-gold border border-brand-gold/20' : 'bg-neutral-800 text-neutral-400'}">
+              ${c.tier}
+            </span>
+          </td>
+          <td class="py-3.5">${c.orders} Suits</td>
+          <td class="py-3.5 font-mono text-emerald-400">${c.spend}</td>
+          <td class="py-3.5 text-right">
+            <button onclick="viewCustomer(${c.id})" class="px-3 py-1.5 border border-brand-border hover:border-brand-gold text-neutral-300 hover:text-brand-gold rounded-full text-[10px] uppercase font-bold transition-all">
+              View Profile
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    renderCustomers(customersData);
+
+    // LIVE SEARCH FILTER
+    function filterCustomers() {
+      const query = document.getElementById('customerSearch').value.toLowerCase();
+      const filtered = customersData.filter(c => 
+        c.name.toLowerCase().includes(query) || 
+        c.email.toLowerCase().includes(query) || 
+        c.tier.toLowerCase().includes(query)
+      );
+      renderCustomers(filtered);
+    }
+
+    // MODAL FUNCTIONS
+    function viewCustomer(id) {
+      const client = customersData.find(c => c.id === id);
+      if (!client) return;
+
+      document.getElementById('modalName').innerText = client.name;
+      document.getElementById('modalDetails').innerHTML = `
+        <div class="grid grid-cols-2 gap-4 bg-neutral-900 p-4 rounded-2xl border border-brand-border">
+          <div><span class="text-neutral-500 text-[10px] uppercase block">Email Address</span><strong class="text-white">${client.email}</strong></div>
+          <div><span class="text-neutral-500 text-[10px] uppercase block">VIP Status Tier</span><strong class="text-brand-gold">${client.tier}</strong></div>
+          <div><span class="text-neutral-500 text-[10px] uppercase block">Completed Commissions</span><strong class="text-white">${client.orders} Order Logs</strong></div>
+          <div><span class="text-neutral-500 text-[10px] uppercase block">Lifetime Spend</span><strong class="text-emerald-400">${client.spend}</strong></div>
+        </div>
+
+        <div class="space-y-2">
+          <span class="font-serif font-bold uppercase text-white block">Master Fitting Profile</span>
+          <div class="grid grid-cols-3 gap-3 text-center">
+            <div class="bg-neutral-900 border border-brand-border p-3 rounded-xl">
+              <span class="text-[10px] text-neutral-500 block">Jacket Chest</span>
+              <strong class="text-brand-gold font-mono">${client.chest}</strong>
+            </div>
+            <div class="bg-neutral-900 border border-brand-border p-3 rounded-xl">
+              <span class="text-[10px] text-neutral-500 block">Trouser Waist</span>
+              <strong class="text-brand-gold font-mono">${client.waist}</strong>
+            </div>
+            <div class="bg-neutral-900 border border-brand-border p-3 rounded-xl">
+              <span class="text-[10px] text-neutral-500 block">Sleeve Length</span>
+              <strong class="text-brand-gold font-mono">${client.sleeve}</strong>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('customerModal').classList.remove('hidden');
+    }
+
+    function openAddClientModal() {
+      document.getElementById('modalName').innerText = "Create Client Entry";
+      document.getElementById('modalDetails').innerHTML = `
+        <div class="space-y-3">
+          <input type="text" placeholder="Full Client Name" class="w-full bg-neutral-900 border border-brand-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+          <input type="email" placeholder="Contact Email Address" class="w-full bg-neutral-900 border border-brand-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" placeholder="Chest (e.g. 40R)" class="bg-neutral-900 border border-brand-border rounded-xl px-3 py-2 text-xs text-white">
+            <input type="text" placeholder="Waist (e.g. 32W)" class="bg-neutral-900 border border-brand-border rounded-xl px-3 py-2 text-xs text-white">
+            <input type="text" placeholder="Sleeve" class="bg-neutral-900 border border-brand-border rounded-xl px-3 py-2 text-xs text-white">
+          </div>
+        </div>
+      `;
+      document.getElementById('customerModal').classList.remove('hidden');
+    }
+
+    function closeCustomerModal() {
+      document.getElementById('customerModal').classList.add('hidden');
+    }
+
+    // LOGOUT
+    function handleLogout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

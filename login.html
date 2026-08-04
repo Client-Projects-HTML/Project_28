@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Sign In | Atelier Vogue</title>
+  
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { black: '#0a0a0a', card: '#121212', gold: '#d4af37', goldHover: '#b89628' }
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-brand-black text-neutral-100 font-sans flex flex-col justify-between">
+
+  <!-- TOP HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-50 border-b border-neutral-800 bg-brand-black/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <div class="w-9 h-9 border border-brand-gold text-brand-gold flex items-center justify-center rounded-full font-serif font-bold">V</div>
+          <span class="font-serif text-lg font-bold uppercase tracking-widest text-white">Atelier Vogue</span>
+        </a>
+        
+        <!-- Action Link back to main site -->
+        <a href="index.html" class="px-4 py-2 border border-brand-gold text-brand-gold text-xs font-bold uppercase rounded-full hover:bg-brand-gold hover:text-black transition-all">
+          Exit to Main Site
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER (SPLIT SCREEN: SLIDER + LOGIN FORM) -->
+  <main class="pt-28 pb-16 px-4 max-w-7xl mx-auto w-full my-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-brand-card border border-neutral-800 rounded-3xl overflow-hidden shadow-2xl">
+      
+      <!-- LEFT COLUMN: IMAGE SLIDER (7 COLS) -->
+      <div class="lg:col-span-7 relative min-h-[450px] lg:min-h-[600px] flex flex-col justify-between p-8 sm:p-12 overflow-hidden border-b lg:border-b-0 lg:border-r border-neutral-800">
+        
+        <!-- Slide Background Images -->
+        <div class="login-slide active absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-100" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.3), rgba(10,10,10,0.9)), url('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1200&auto=format&fit=crop');"></div>
+        <div class="login-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.3), rgba(10,10,10,0.9)), url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop');"></div>
+        <div class="login-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.3), rgba(10,10,10,0.9)), url('https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop');"></div>
+
+        <!-- Top Tag -->
+        <div class="relative z-10">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-brand-gold border border-brand-gold/40 bg-brand-gold/10 px-3 py-1 rounded-full backdrop-blur-md">Secure Portal Entry</span>
+        </div>
+
+        <!-- Dynamic Caption & Controls -->
+        <div class="relative z-10 space-y-4">
+          <div id="slideCaption" class="space-y-2">
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold uppercase text-white">Master Tailor Operations</h2>
+            <p class="text-xs text-neutral-300 max-w-md">Manage bespoke commission workflows, pattern drafting metrics, and client appointments in one centralized hub.</p>
+          </div>
+
+          <!-- Slider Controls -->
+          <div class="flex items-center justify-between pt-4 border-t border-white/10">
+            <div class="flex gap-2">
+              <button onclick="setSlide(0)" class="login-dot w-8 h-1 rounded-full bg-brand-gold transition-all"></button>
+              <button onclick="setSlide(1)" class="login-dot w-3 h-1 rounded-full bg-white/30 transition-all"></button>
+              <button onclick="setSlide(2)" class="login-dot w-3 h-1 rounded-full bg-white/30 transition-all"></button>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="prevSlide()" class="w-8 h-8 rounded-full border border-white/20 bg-black/40 hover:border-brand-gold text-white flex items-center justify-center transition-all"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+              <button onclick="nextSlide()" class="w-8 h-8 rounded-full border border-white/20 bg-black/40 hover:border-brand-gold text-white flex items-center justify-center transition-all"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: LOGIN FORM (5 COLS) -->
+      <div class="lg:col-span-5 p-8 sm:p-12 space-y-8 flex flex-col justify-center">
+        <div>
+          <span class="text-[10px] font-mono text-brand-gold uppercase tracking-widest">Authentication</span>
+          <h1 class="font-serif text-2xl font-bold uppercase text-white mt-1">Admin Portal Sign In</h1>
+          <p class="text-xs text-neutral-400 mt-1">Please enter your authorized studio credentials.</p>
+        </div>
+
+        <!-- Form submitting to handleLogin JavaScript -->
+        <form onsubmit="handleLogin(event)" class="space-y-5">
+          <div class="space-y-2">
+            <label class="block text-xs font-serif uppercase text-white">Staff Email / Username</label>
+            <div class="relative">
+              <input type="email" required placeholder="admin@ateliervogue.com" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 pl-10 text-xs text-white focus:outline-none focus:border-brand-gold">
+              <i data-lucide="mail" class="w-4 h-4 text-neutral-500 absolute left-3.5 top-3.5"></i>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-serif uppercase text-white">Security Password</label>
+            <div class="relative">
+              <input type="password" required placeholder="••••••••••••" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 pl-10 text-xs text-white focus:outline-none focus:border-brand-gold">
+              <i data-lucide="lock" class="w-4 h-4 text-neutral-500 absolute left-3.5 top-3.5"></i>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-serif uppercase text-white">Access Level</label>
+            <select class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-neutral-300 focus:outline-none focus:border-brand-gold">
+              <option>Master Cutter / Tailor</option>
+              <option>Studio Concierge</option>
+              <option>Atelier Director (Full Admin)</option>
+            </select>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <button type="submit" class="w-full py-4 bg-brand-gold hover:bg-brand-goldHover text-black font-bold text-xs uppercase tracking-widest rounded-full transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-gold/10">
+            <span>Sign In To Admin Portal</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-6 text-center text-xs text-neutral-500 border-t border-neutral-800/40">
+    <p>&copy; 2026 Atelier Vogue. Operational Administration Gateway.</p>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    lucide.createIcons();
+
+    // 1. LOGIN SUBMISSION & SESSION LOGIC
+    function handleLogin(event) {
+      event.preventDefault(); // Stop standard form submission reload
+      sessionStorage.setItem('adminLoggedIn', 'true'); // Store authentication state
+      window.location.href = 'admin.html'; // Redirect to the 5-section admin portal
+    }
+
+    // 2. LEFT SIDEBAR IMAGE SLIDER LOGIC
+    const sliderData = [
+      { 
+        title: "Master Tailor Operations", 
+        desc: "Manage bespoke commission workflows, pattern drafting metrics, and client appointments in one centralized hub." 
+      },
+      { 
+        title: "Bespoke Fitting Calendar", 
+        desc: "Schedule initial drafting sessions, manage secondary fittings, and log hand-finishing stages." 
+      },
+      { 
+        title: "Textile Vault Management", 
+        desc: "Monitor inventory levels for Super 180s worsted wools, cashmere blends, and silk jacket linings." 
+      }
+    ];
+
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.login-slide');
+    const dots = document.querySelectorAll('.login-dot');
+    const captionContainer = document.getElementById('slideCaption');
+
+    function renderSlide() {
+      slides.forEach((slide, idx) => slide.classList.toggle('opacity-100', idx === currentSlideIndex));
+      slides.forEach((slide, idx) => slide.classList.toggle('opacity-0', idx !== currentSlideIndex));
+      
+      dots.forEach((dot, idx) => {
+        dot.className = idx === currentSlideIndex 
+          ? "login-dot w-8 h-1 rounded-full bg-brand-gold transition-all" 
+          : "login-dot w-3 h-1 rounded-full bg-white/30 transition-all";
+      });
+
+      captionContainer.innerHTML = `
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold uppercase text-white">${sliderData[currentSlideIndex].title}</h2>
+        <p class="text-xs text-neutral-300 max-w-md">${sliderData[currentSlideIndex].desc}</p>
+      `;
+    }
+
+    function setSlide(index) { currentSlideIndex = index; renderSlide(); }
+    function nextSlide() { currentSlideIndex = (currentSlideIndex + 1) % sliderData.length; renderSlide(); }
+    function prevSlide() { currentSlideIndex = (currentSlideIndex - 1 + sliderData.length) % sliderData.length; renderSlide(); }
+
+    // Auto-rotate image slider every 5 seconds
+    setInterval(nextSlide, 5000);
+  </script>
+</body>
+</html>

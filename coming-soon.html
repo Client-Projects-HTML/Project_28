@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon | Atelier Vogue</title>
+  
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 
+            brand: { black: '#0a0a0a', card: '#121212', border: '#222222', gold: '#d4af37', goldHover: '#b89628' } 
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-brand-gold selection:text-black">
+
+  <!-- BACKGROUND DECORATIVE ELEMENTS -->
+  <div class="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-900/40 via-brand-black to-brand-black pointer-events-none -z-10"></div>
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-gold/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <!-- 1. HEADER / LOGO -->
+  <header class="p-8 sm:p-12 flex justify-center items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-2xl bg-brand-gold/10">V</div>
+      <div>
+        <span class="font-serif font-bold text-lg tracking-[0.2em] text-white uppercase block leading-none">Atelier Vogue</span>
+        <span class="text-[10px] font-mono text-brand-gold uppercase tracking-widest mt-1 block">Haute Couture</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. MAIN COMING SOON CONTENT -->
+  <main class="max-w-4xl mx-auto px-6 py-8 text-center space-y-12">
+    
+    <!-- SUBTITLE & TITLE -->
+    <div class="space-y-4">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold text-xs uppercase font-mono tracking-widest">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <span>Autumn / Winter Collection Unveiling</span>
+      </div>
+      <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold uppercase text-white tracking-tight leading-none">
+        Crafting The Next <br><span class="text-brand-gold italic font-normal">Masterpiece</span>
+      </h1>
+      <p class="max-w-xl mx-auto text-neutral-400 text-xs sm:text-sm font-light leading-relaxed">
+        Our digital atelier is undergoing a bespoke transformation. Private collection previews and online commissions will resume shortly.
+      </p>
+    </div>
+
+    <!-- COUNTDOWN TIMER -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-2xl mx-auto">
+      <div class="bg-brand-card/80 border border-brand-border backdrop-blur-md p-6 rounded-3xl space-y-1 shadow-2xl">
+        <span id="days" class="font-serif text-3xl sm:text-5xl font-bold text-brand-gold block">00</span>
+        <span class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Days</span>
+      </div>
+
+      <div class="bg-brand-card/80 border border-brand-border backdrop-blur-md p-6 rounded-3xl space-y-1 shadow-2xl">
+        <span id="hours" class="font-serif text-3xl sm:text-5xl font-bold text-white block">00</span>
+        <span class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Hours</span>
+      </div>
+
+      <div class="bg-brand-card/80 border border-brand-border backdrop-blur-md p-6 rounded-3xl space-y-1 shadow-2xl">
+        <span id="minutes" class="font-serif text-3xl sm:text-5xl font-bold text-white block">00</span>
+        <span class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Minutes</span>
+      </div>
+
+      <div class="bg-brand-card/80 border border-brand-border backdrop-blur-md p-6 rounded-3xl space-y-1 shadow-2xl">
+        <span id="seconds" class="font-serif text-3xl sm:text-5xl font-bold text-brand-gold block">00</span>
+        <span class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Seconds</span>
+      </div>
+    </div>
+
+    <!-- VIP ACCESS NEWSLETTER FORM -->
+    <div class="max-w-md mx-auto space-y-4">
+      <p class="text-xs font-mono text-neutral-400 uppercase tracking-wider">Request Private Invitation & Launch Alert</p>
+      
+      <form onsubmit="handleSubscribe(event)" class="flex flex-col sm:flex-row gap-2 relative">
+        <input 
+          type="email" 
+          id="vipEmail" 
+          required 
+          placeholder="Enter your VIP email address..." 
+          class="flex-1 bg-brand-card border border-brand-border rounded-full py-3.5 px-6 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-brand-gold transition-all"
+        >
+        <button 
+          type="submit" 
+          class="px-8 py-3.5 bg-brand-gold hover:bg-brand-goldHover text-black font-bold text-xs uppercase tracking-wider rounded-full transition-all shrink-0 flex items-center justify-center gap-2"
+        >
+          <span>Notify Me</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </form>
+      <div id="subscribeSuccess" class="hidden text-xs text-emerald-400 font-mono">
+        ✓ You have been placed on the private Atelier launch guestlist.
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 3. FOOTER -->
+  <footer class="p-8 text-center border-t border-brand-border/40 flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto w-full gap-4 text-xs text-neutral-500">
+    <div>
+      © 2026 Atelier Vogue Ltd. All rights reserved.
+    </div>
+
+    <!-- Social Links -->
+    <div class="flex items-center gap-6">
+      <a href="#" class="hover:text-brand-gold transition-all"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+      <a href="#" class="hover:text-brand-gold transition-all"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      <a href="#" class="hover:text-brand-gold transition-all"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+    </div>
+
+    <div class="font-mono text-[10px]">
+      74 Savile Row, Mayfair, London
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    // Set Launch Target Date (30 Days from now)
+    const launchDate = new Date();
+    launchDate.setDate(launchDate.getDate() + 30);
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const difference = launchDate - now;
+
+      if (difference <= 0) {
+        document.getElementById("days").innerText = "00";
+        document.getElementById("hours").innerText = "00";
+        document.getElementById("minutes").innerText = "00";
+        document.getElementById("seconds").innerText = "00";
+        return;
+      }
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = days < 10 ? '0' + days : days;
+      document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
+      document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
+      document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+    }
+
+    // Run timer loop every second
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // Subscription Action
+    function handleSubscribe(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById("vipEmail");
+      const successMsg = document.getElementById("subscribeSuccess");
+
+      if (emailInput.value) {
+        successMsg.classList.remove("hidden");
+        emailInput.value = "";
+      }
+    }
+  </script>
+</body>
+</html>

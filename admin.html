@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Atelier Vogue</title>
+  
+  <!-- Security Check -->
+  <script>
+    if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 
+            brand: { black: '#0a0a0a', card: '#121212', border: '#222222', gold: '#d4af37', goldHover: '#b89628' } 
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex overflow-x-hidden">
+
+  <!-- 1. LEFT SIDEBAR -->
+  <aside class="w-64 bg-brand-card border-r border-brand-border flex flex-col justify-between shrink-0 min-h-screen">
+    <div class="p-6 space-y-8">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10">V</div>
+        <div>
+          <span class="font-serif font-bold text-sm tracking-widest text-white uppercase block leading-none">Atelier Vogue</span>
+          <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider">Admin Portal</span>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="space-y-2 text-xs font-medium" id="sidebarNav">
+        <a href="admin.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-gold text-black font-bold shadow-lg shadow-brand-gold/10 transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="admin-customers.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Customers</span>
+        </a>
+        <a href="admin-messages.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="message-square" class="w-4 h-4"></i>
+          <span>Messages</span>
+        </a>
+        <a href="admin-orders.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span>Orders</span>
+        </a>
+        <button onclick="setActiveNav(this); alert('Settings module active.');" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+          <span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Sidebar Bottom Logout Action -->
+    <div class="p-6 border-t border-brand-border">
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-neutral-800 hover:border-brand-gold text-neutral-300 hover:text-brand-gold text-xs font-bold uppercase tracking-wider transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 2. MAIN CONTENT AREA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <!-- TOP BAR WITH REAL-TIME SEARCH -->
+    <header class="h-20 border-b border-brand-border px-8 flex items-center justify-between gap-4 bg-brand-black/80 backdrop-blur-md sticky top-0 z-40">
+      <div class="flex items-center gap-4 flex-1 max-w-md">
+        <div class="relative w-full">
+          <!-- Realtime Search Input -->
+          <input type="text" id="searchInput" onkeyup="filterOrdersTable()" placeholder="Search orders, clients, status..." class="w-full bg-brand-card border border-brand-border rounded-full py-2.5 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-brand-gold transition-all">
+          <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute left-3.5 top-3"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Interactive Notification Bell -->
+        <button onclick="toggleNotifications()" class="relative w-9 h-9 rounded-full bg-neutral-900 border border-brand-border flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span id="notifBadge" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-brand-black"></span>
+        </button>
+
+        <div class="flex items-center gap-3 pl-3 border-l border-brand-border">
+          <div class="w-9 h-9 rounded-full bg-brand-gold text-black flex items-center justify-center font-bold text-xs font-serif">AV</div>
+          <div class="hidden sm:block text-left">
+            <span class="text-xs font-bold text-white block leading-none">Master Director</span>
+            <span class="text-[9px] text-neutral-500">admin@ateliervogue.com</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD BODY -->
+    <main class="p-8 space-y-8 overflow-y-auto">
+
+      <!-- METRIC CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">1,504</span>
+            <span class="text-xs text-neutral-400 uppercase tracking-wider font-medium">Daily Studio Views</span>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 text-brand-gold flex items-center justify-center">
+            <i data-lucide="eye" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span id="commissionsCount" class="text-2xl font-bold font-serif text-white block">80</span>
+            <span class="text-xs text-neutral-400 uppercase tracking-wider font-medium">Active Commissions</span>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-brand-gold text-black flex items-center justify-center">
+            <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">284</span>
+            <span class="text-xs text-neutral-400 uppercase tracking-wider font-medium">Client Reviews</span>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 text-brand-gold flex items-center justify-center">
+            <i data-lucide="message-square" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5-SECTION SLIDER NAVIGATION MODULE -->
+      <section class="relative bg-brand-card border border-brand-border rounded-3xl overflow-hidden min-h-[380px] flex flex-col justify-between p-8 sm:p-10 shadow-2xl">
+        
+        <!-- Slide Image Backgrounds -->
+        <div class="admin-slide active absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-100" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.65), rgba(10,10,10,0.95)), url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop');"></div>
+        <div class="admin-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.65), rgba(10,10,10,0.95)), url('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1200&auto=format&fit=crop');"></div>
+        <div class="admin-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.65), rgba(10,10,10,0.95)), url('https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1200&auto=format&fit=crop');"></div>
+        <div class="admin-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.65), rgba(10,10,10,0.95)), url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1200&auto=format&fit=crop');"></div>
+        <div class="admin-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0" style="background-image: linear-gradient(180deg, rgba(10,10,10,0.65), rgba(10,10,10,0.95)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1200&auto=format&fit=crop');"></div>
+
+        <div class="relative z-10 flex justify-between items-center">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-brand-gold border border-brand-gold/40 bg-brand-gold/10 px-3 py-1 rounded-full backdrop-blur-md">Featured Module Slider</span>
+          <span id="slideCounter" class="text-xs font-mono text-neutral-400">Section 01 / 05</span>
+        </div>
+
+        <div class="relative z-10 space-y-4 max-w-2xl">
+          <div id="slideContent" class="space-y-2">
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold uppercase text-white">1. Bespoke Fitting Calendar</h2>
+            <p class="text-xs text-neutral-300">Schedule initial drafting sessions, manage secondary fittings, and review daily client appointment schedules.</p>
+          </div>
+
+          <div id="slideAction">
+            <!-- Dynamically populated button -->
+          </div>
+        </div>
+
+        <!-- Slider Navigation Controls -->
+        <div class="relative z-10 flex items-center justify-between pt-4 border-t border-white/10">
+          <div class="flex gap-2">
+            <button onclick="setAdminSlide(0)" class="admin-dot w-8 h-1 rounded-full bg-brand-gold transition-all"></button>
+            <button onclick="setAdminSlide(1)" class="admin-dot w-3 h-1 rounded-full bg-white/30 transition-all"></button>
+            <button onclick="setAdminSlide(2)" class="admin-dot w-3 h-1 rounded-full bg-white/30 transition-all"></button>
+            <button onclick="setAdminSlide(3)" class="admin-dot w-3 h-1 rounded-full bg-white/30 transition-all"></button>
+            <button onclick="setAdminSlide(4)" class="admin-dot w-3 h-1 rounded-full bg-white/30 transition-all"></button>
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="prevAdminSlide()" class="w-8 h-8 rounded-full border border-neutral-700 bg-black/50 hover:border-brand-gold text-white flex items-center justify-center transition-all"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+            <button onclick="nextAdminSlide()" class="w-8 h-8 rounded-full border border-neutral-700 bg-black/50 hover:border-brand-gold text-white flex items-center justify-center transition-all"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ORDERS TABLE -->
+      <div class="bg-brand-card border border-brand-border rounded-3xl p-6 space-y-6 shadow-xl">
+        <div class="flex items-center justify-between">
+          <h3 class="font-serif text-lg font-bold text-white uppercase">Recent Bespoke Orders</h3>
+          <!-- Toggle View All Button -->
+          <button id="toggleOrdersBtn" onclick="toggleAllOrders()" class="px-4 py-2 bg-brand-gold text-black text-xs font-bold uppercase rounded-full hover:bg-brand-goldHover transition-all">View All</button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-neutral-300" id="ordersTable">
+            <thead class="border-b border-brand-border font-serif uppercase text-neutral-400 text-[10px] tracking-wider">
+              <tr>
+                <th class="pb-3">Name / Item</th>
+                <th class="pb-3">Price</th>
+                <th class="pb-3">Payment</th>
+                <th class="pb-3 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-brand-border/60" id="ordersBody">
+              <!-- Orders injected dynamically via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- 3. FUNCTIONAL MODAL DIALOG -->
+  <div id="moduleModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-brand-border max-w-lg w-full rounded-3xl p-6 sm:p-8 space-y-6 relative shadow-2xl">
+      <button onclick="closeModal()" class="absolute top-6 right-6 text-neutral-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      
+      <div>
+        <span class="text-[10px] font-mono text-brand-gold uppercase tracking-widest">Active Module View</span>
+        <h3 id="modalTitle" class="font-serif text-2xl font-bold uppercase text-white mt-1">Module Detail</h3>
+      </div>
+
+      <div id="modalBody" class="text-xs text-neutral-300 space-y-3">
+        <!-- Content inserted dynamically -->
+      </div>
+
+      <div class="pt-4 border-t border-brand-border flex justify-end gap-3">
+        <button onclick="closeModal()" class="px-5 py-2.5 border border-neutral-700 text-neutral-300 hover:text-white rounded-full text-xs uppercase font-bold">Close</button>
+        <button onclick="closeModal()" class="px-5 py-2.5 bg-brand-gold text-black rounded-full text-xs uppercase font-bold hover:bg-brand-goldHover">Confirm Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    lucide.createIcons();
+
+    // 1. ORDERS DATA & TABLE LOGIC
+    const initialOrders = [
+      { name: "Star Bespoke Tuxedo", price: "$1,200", payment: "Paid", status: "Delivered", color: "emerald" },
+      { name: "Double Breasted Overcoat", price: "$110", payment: "Due", status: "Pending", color: "amber" },
+      { name: "Custom Velvet Dinner Jacket", price: "$620", payment: "Paid", status: "Returned", color: "rose" },
+      { name: "Silk Peak-Lapel Suit", price: "$1,100", payment: "Due", status: "In Progress", color: "blue" }
+    ];
+
+    const extraOrders = [
+      { name: "Cashmere Trench Coat", price: "$2,400", payment: "Paid", status: "Delivered", color: "emerald" },
+      { name: "Merino Wool Trousers", price: "$350", payment: "Paid", status: "Delivered", color: "emerald" },
+      { name: "Italian Silk Waistcoat", price: "$480", payment: "Due", status: "In Progress", color: "blue" }
+    ];
+
+    let showingAllOrders = false;
+
+    function renderOrdersTable(data) {
+      const tbody = document.getElementById('ordersBody');
+      tbody.innerHTML = data.map(order => `
+        <tr>
+          <td class="py-3.5 font-semibold text-white">${order.name}</td>
+          <td class="py-3.5">${order.price}</td>
+          <td class="py-3.5 font-mono ${order.payment === 'Paid' ? 'text-emerald-400' : 'text-amber-400'}">${order.payment}</td>
+          <td class="py-3.5 text-right">
+            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-${order.color}-500/10 text-${order.color}-400 border border-${order.color}-500/20">
+              ${order.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    renderOrdersTable(initialOrders);
+
+    function toggleAllOrders() {
+      showingAllOrders = !showingAllOrders;
+      const btn = document.getElementById('toggleOrdersBtn');
+      if (showingAllOrders) {
+        renderOrdersTable([...initialOrders, ...extraOrders]);
+        btn.innerText = "Show Less";
+      } else {
+        renderOrdersTable(initialOrders);
+        btn.innerText = "View All";
+      }
+    }
+
+    // Live Search Filter Functionality
+    function filterOrdersTable() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const currentDataset = showingAllOrders ? [...initialOrders, ...extraOrders] : initialOrders;
+      
+      const filtered = currentDataset.filter(o => 
+        o.name.toLowerCase().includes(query) || 
+        o.payment.toLowerCase().includes(query) || 
+        o.status.toLowerCase().includes(query)
+      );
+      
+      renderOrdersTable(filtered);
+    }
+
+    // 2. SLIDER & MODAL FUNCTIONALITY
+    const adminSlides = [
+      { 
+        title: "1. Bespoke Fitting Calendar", 
+        desc: "Schedule initial drafting sessions, manage secondary fittings, and review daily client appointment schedules.", 
+        btnText: "Manage Fittings", 
+        counter: "Section 01 / 05", 
+        details: "Active appointments today: 8 scheduled.<br>Next client: Marcus Vance at 14:00 PM.", 
+        url: null 
+      },
+      { 
+        title: "2. Client Concierge & Messages", 
+        desc: "Review active VIP client inquiries, respond to bespoke consultation requests, and view message threads.", 
+        btnText: "Open Messages", 
+        counter: "Section 02 / 05", 
+        details: "", 
+        url: "admin-messages.html" // Direct Link to Messages
+      },
+      { 
+        title: "3. Financial & Revenue Metrics", 
+        desc: "Analyze studio monthly revenues, commission payouts, outstanding deposits, and financial analytics.", 
+        btnText: "View Financials", 
+        counter: "Section 03 / 05", 
+        details: "Monthly revenue summary:<br>• Total Gross: $48,200<br>• Outstanding Balances: $4,300", 
+        url: null 
+      },
+      { 
+        title: "4. Master Orders Log", 
+        desc: "Track bespoke suit manufacturing stages, client delivery statuses, and payment states.", 
+        btnText: "View All Orders", 
+        counter: "Section 04 / 05", 
+        details: "", 
+        url: "admin-orders.html" // Direct Link to Orders
+      },
+      { 
+        title: "5. Client Relationship Database", 
+        desc: "Access VIP client measurement archives, fitting preferences, past suit orders, and contact logs.", 
+        btnText: "Client Directory", 
+        counter: "Section 05 / 05", 
+        details: "", 
+        url: "admin-customers.html" // Direct Link to Customers
+      }
+    ];
+
+    let currentSlide = 0;
+    const slideElements = document.querySelectorAll('.admin-slide');
+    const dotElements = document.querySelectorAll('.admin-dot');
+    const contentBox = document.getElementById('slideContent');
+    const actionBox = document.getElementById('slideAction');
+    const counterBox = document.getElementById('slideCounter');
+
+    function updateAdminSlider() {
+      slideElements.forEach((el, i) => el.classList.toggle('opacity-100', i === currentSlide));
+      slideElements.forEach((el, i) => el.classList.toggle('opacity-0', i !== currentSlide));
+      
+      dotElements.forEach((dot, i) => {
+        dot.className = i === currentSlide 
+          ? "admin-dot w-8 h-1 rounded-full bg-brand-gold transition-all" 
+          : "admin-dot w-3 h-1 rounded-full bg-white/30 transition-all";
+      });
+
+      counterBox.innerText = adminSlides[currentSlide].counter;
+      contentBox.innerHTML = `
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold uppercase text-white">${adminSlides[currentSlide].title}</h2>
+        <p class="text-xs text-neutral-300">${adminSlides[currentSlide].desc}</p>
+      `;
+
+      if (adminSlides[currentSlide].url) {
+        actionBox.innerHTML = `
+          <a href="${adminSlides[currentSlide].url}" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-gold hover:bg-brand-goldHover text-black font-bold text-xs uppercase tracking-wider rounded-full transition-all">
+            <span>${adminSlides[currentSlide].btnText}</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        `;
+      } else {
+        actionBox.innerHTML = `
+          <button onclick="openModal(${currentSlide})" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-gold hover:bg-brand-goldHover text-black font-bold text-xs uppercase tracking-wider rounded-full transition-all">
+            <span>${adminSlides[currentSlide].btnText}</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    function setAdminSlide(idx) { currentSlide = idx; updateAdminSlider(); }
+    function nextAdminSlide() { currentSlide = (currentSlide + 1) % adminSlides.length; updateAdminSlider(); }
+    function prevAdminSlide() { currentSlide = (currentSlide - 1 + adminSlides.length) % adminSlides.length; updateAdminSlider(); }
+
+    updateAdminSlider();
+    setInterval(nextAdminSlide, 6000);
+
+    // Modal Control
+    function openModal(index) {
+      document.getElementById('modalTitle').innerText = adminSlides[index].title;
+      document.getElementById('modalBody').innerHTML = adminSlides[index].details;
+      document.getElementById('moduleModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('moduleModal').classList.add('hidden');
+    }
+
+    // 3. SIDEBAR NAVIGATION HIGHLIGHT
+    function setActiveNav(element) {
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.className = "nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-white hover:bg-neutral-900 transition-all";
+      });
+      element.className = "nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-gold text-black font-bold shadow-lg shadow-brand-gold/10 transition-all";
+    }
+
+    // 4. NOTIFICATIONS TOGGLE
+    function toggleNotifications() {
+      const badge = document.getElementById('notifBadge');
+      badge.classList.add('hidden');
+      alert("Notifications cleared: No new system updates.");
+    }
+
+    // 5. LOGOUT FUNCTIONALITY
+    function handleLogout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

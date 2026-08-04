@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | Atelier Vogue</title>
+
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 
+            brand: { black: '#0a0a0a', card: '#121212', border: '#222222', gold: '#d4af37', goldHover: '#b89628' } 
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-brand-gold selection:text-black">
+
+  <!-- BACKGROUND GLOW EFFECTS -->
+  <div class="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-900/40 via-brand-black to-brand-black pointer-events-none -z-10"></div>
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-gold/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <!-- 1. HEADER / BRAND LOGO -->
+  <header class="p-8 sm:p-12 flex justify-center items-center">
+    <a href="index.html" class="flex items-center gap-3 group">
+      <div class="w-12 h-12 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-2xl bg-brand-gold/10 group-hover:bg-brand-gold group-hover:text-black transition-all duration-300">V</div>
+      <div>
+        <span class="font-serif font-bold text-lg tracking-[0.2em] text-white uppercase block leading-none">Atelier Vogue</span>
+        <span class="text-[10px] font-mono text-brand-gold uppercase tracking-widest mt-1 block">Haute Couture</span>
+      </div>
+    </a>
+  </header>
+
+  <!-- 2. MAIN 404 CONTENT -->
+  <main class="max-w-2xl mx-auto px-6 py-8 text-center space-y-8 my-auto">
+    
+    <!-- BIG 404 STYLING -->
+    <div class="relative inline-block">
+      <h1 class="font-serif text-8xl sm:text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-brand-gold via-brand-gold/40 to-transparent tracking-widest select-none">
+        404
+      </h1>
+      <span class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-mono text-brand-gold uppercase tracking-[0.3em] bg-brand-black px-4 py-1 border border-brand-border rounded-full shadow-xl">
+        Page Out Of Pattern
+      </span>
+    </div>
+
+    <!-- ERROR DESCRIPTION -->
+    <div class="space-y-3">
+      <h2 class="font-serif text-2xl sm:text-3xl font-bold uppercase text-white tracking-wide">
+        Lost In The Atelier
+      </h2>
+      <p class="max-w-md mx-auto text-neutral-400 text-xs sm:text-sm font-light leading-relaxed">
+        The bespoke page or garment route you are seeking has been moved, renamed, or no longer exists in our master collection.
+      </p>
+    </div>
+
+    <!-- QUICK SEARCH BAR -->
+    <div class="max-w-md mx-auto pt-2">
+      <form onsubmit="handleSearch(event)" class="relative">
+        <input 
+          type="text" 
+          id="searchInput"
+          placeholder="Search collections, orders, or pages..." 
+          class="w-full bg-brand-card border border-brand-border rounded-full py-3.5 pl-12 pr-28 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-brand-gold transition-all"
+        >
+        <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute left-4 top-4"></i>
+        <button 
+          type="submit" 
+          class="absolute right-1.5 top-1.5 px-5 py-2 bg-brand-gold hover:bg-brand-goldHover text-black font-bold text-[11px] uppercase tracking-wider rounded-full transition-all"
+        >
+          Search
+        </button>
+      </form>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+      <button 
+        onclick="window.history.back()" 
+        class="w-full sm:w-auto px-8 py-3.5 border border-brand-border hover:border-brand-gold text-neutral-300 hover:text-white font-bold text-xs uppercase tracking-wider rounded-full transition-all flex items-center justify-center gap-2"
+      >
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Go Back</span>
+      </button>
+
+      <a 
+        href="index.html" 
+        class="w-full sm:w-auto px-8 py-3.5 bg-brand-gold hover:bg-brand-goldHover text-black font-bold text-xs uppercase tracking-wider rounded-full transition-all shadow-lg shadow-brand-gold/10 flex items-center justify-center gap-2"
+      >
+        <i data-lucide="home" class="w-4 h-4"></i>
+        <span>Return To Home</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- 3. FOOTER -->
+  <footer class="p-8 text-center border-t border-brand-border/40 flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto w-full gap-4 text-xs text-neutral-500">
+    <div>
+      © 2026 Atelier Vogue Ltd. All rights reserved.
+    </div>
+
+    <!-- Quick Help Links -->
+    <div class="flex items-center gap-6">
+      <a href="admin.html" class="hover:text-brand-gold transition-all">Admin Portal</a>
+      <a href="admin-messages.html" class="hover:text-brand-gold transition-all">Support</a>
+      <a href="coming-soon.html" class="hover:text-brand-gold transition-all">Upcoming Collections</a>
+    </div>
+
+    <div class="font-mono text-[10px]">
+      74 Savile Row, Mayfair, London
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    function handleSearch(e) {
+      e.preventDefault();
+      const query = document.getElementById('searchInput').value;
+      if (query.trim()) {
+        window.location.href = `admin-orders.html?search=${encodeURIComponent(query)}`;
+      }
+    }
+  </script>
+</body>
+</html>
