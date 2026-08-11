@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer Directory | Atelier Vogue Admin</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a' /%3E%3Ctext x='50' y='70' font-family='serif' font-size='60' font-weight='bold' fill='%23d4af37' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
   
   <!-- Security Check (Ensures authenticated session) -->
   <script>
@@ -31,19 +32,57 @@
     }
   </script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Light Mode Overrides */
+    html:not(.dark) body { background-color: #fcfbf7; color: #1a1a1a; }
+    html:not(.dark) header, html:not(.dark) aside, html:not(.dark) .bg-brand-card {
+      background-color: #ffffff;
+      border-color: #e5e7eb;
+    }
+    html:not(.dark) .text-white { color: #0d0d0d; }
+    html:not(.dark) .text-neutral-100, html:not(.dark) .text-neutral-200 { color: #1a1a1a; }
+    html:not(.dark) .text-neutral-300, html:not(.dark) .text-neutral-400, html:not(.dark) .text-neutral-500 { color: #4a4a4a; }
+    html:not(.dark) .bg-brand-black, html:not(.dark) .bg-black { background-color: #fcfbf7; }
+    html:not(.dark) .bg-neutral-900 { background-color: rgba(212, 175, 55, 0.1); }
+    html:not(.dark) .border-brand-border, html:not(.dark) .border-neutral-800 { border-color: rgba(212, 175, 55, 0.2); }
+    html:not(.dark) .bg-black\/50, html:not(.dark) .bg-black\/80 { background-color: rgba(0,0,0,0.8) !important; }
+    html:not(.dark) .bg-black\/50.text-white, html:not(.dark) .bg-black\/80.text-white { color: #ffffff !important; }
+    html:not(.dark) .admin-slider-container .text-white { color: #ffffff !important; }
+    html:not(.dark) .admin-slider-container .text-neutral-300 { color: #d4d4d4 !important; }
+    html:not(.dark) .admin-slider-container .text-neutral-400 { color: #a3a3a3 !important; }
+    html:not(.dark) .hover\:text-white:hover { color: #d4af37 !important; }
+    html:not(.dark) .hover\:bg-neutral-900:hover { background-color: rgba(212, 175, 55, 0.1) !important; }
+  </style>
 </head>
 <body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex overflow-x-hidden">
 
+  <!-- Mobile Overlay -->
+  <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
   <!-- 1. LEFT SIDEBAR -->
-  <aside class="w-64 bg-brand-card border-r border-brand-border flex flex-col justify-between shrink-0 min-h-screen">
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-brand-card border-r border-brand-border flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:shrink-0 min-h-screen">
     <div class="p-6 space-y-8">
       
-      <!-- Brand Logo -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10">V</div>
-        <div>
-          <span class="font-serif font-bold text-sm tracking-widest text-white uppercase block leading-none">Atelier Vogue</span>
-          <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider">Admin Portal</span>
+      <!-- Brand Logo & Mobile Close -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10">V</div>
+          <div>
+            <span class="font-serif font-bold text-sm tracking-widest text-white uppercase block leading-none">Atelier Vogue</span>
+            <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider">Admin Portal</span>
+          </div>
+        </div>
+        <button onclick="toggleSidebar()" class="lg:hidden text-neutral-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="flex items-center gap-3 p-3 bg-brand-gold/5 rounded-2xl border border-brand-border">
+        <div class="w-10 h-10 rounded-full bg-brand-gold/20 text-brand-gold border border-brand-gold flex items-center justify-center font-bold text-sm font-serif shrink-0">AV</div>
+        <div class="overflow-hidden">
+          <span class="text-sm font-bold text-white block truncate">Master Director</span>
+          <span class="text-[10px] text-brand-gold font-bold uppercase tracking-wider block truncate flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> admin@ateliervogue.com</span>
         </div>
       </div>
 
@@ -86,27 +125,33 @@
   <div class="flex-1 flex flex-col min-w-0">
     
     <!-- TOP HEADER BAR -->
-    <header class="h-20 border-b border-brand-border px-8 flex items-center justify-between gap-4 bg-brand-black/80 backdrop-blur-md sticky top-0 z-40">
-      <div class="flex items-center gap-4 flex-1 max-w-md">
-        <div class="relative w-full">
-          <!-- Filter input for customer directory -->
-          <input type="text" id="customerSearch" onkeyup="filterCustomers()" placeholder="Search client name, tier, or email..." class="w-full bg-brand-card border border-brand-border rounded-full py-2.5 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-brand-gold transition-all">
-          <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute left-3.5 top-3"></i>
-        </div>
+    <header class="h-20 border-b border-brand-border px-4 sm:px-8 flex items-center justify-between gap-4 bg-brand-black/80 backdrop-blur-md sticky top-0 z-40">
+      <!-- Left: Mobile Logo -->
+      <div class="flex items-center">
+        <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10 lg:hidden">V</div>
       </div>
 
+
+
       <div class="flex items-center gap-3">
-        <button onclick="alert('Notifications cleared.')" class="w-9 h-9 rounded-full bg-neutral-900 border border-brand-border flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all">
-          <i data-lucide="bell" class="w-4 h-4"></i>
+        <button onclick="window.location.href='admin-notifications.html'" class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-neutral-900 border border-brand-border flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all">
+          <i data-lucide="bell" class="w-4 h-4 sm:w-4 sm:h-4"></i>
         </button>
 
-        <div class="flex items-center gap-3 pl-3 border-l border-brand-border">
-          <div class="w-9 h-9 rounded-full bg-brand-gold text-black flex items-center justify-center font-bold text-xs font-serif">AV</div>
-          <div class="hidden sm:block text-left">
-            <span class="text-xs font-bold text-white block leading-none">Master Director</span>
-            <span class="text-[9px] text-neutral-500">admin@ateliervogue.com</span>
-          </div>
+        <!-- Theme & RTL Toggles -->
+        <div class="flex items-center gap-1.5 border-l border-brand-border pl-3">
+          <button id="themeToggle" onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold hover:bg-brand-gold hover:text-black transition-all">
+            <i data-lucide="moon" class="w-3.5 h-3.5"></i>
+          </button>
+          <button id="rtlToggle" onclick="toggleRTL()" class="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold hover:bg-brand-gold hover:text-black transition-all">
+            <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
+          </button>
         </div>
+
+        <!-- Hamburger Menu -->
+        <button onclick="toggleSidebar()" class="lg:hidden text-neutral-400 hover:text-white p-2 rounded-lg hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-colors">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
       </div>
     </header>
 
@@ -161,9 +206,15 @@
 
       <!-- CUSTOMERS TABLE -->
       <div class="bg-brand-card border border-brand-border rounded-3xl p-6 space-y-6 shadow-xl">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h3 class="font-serif text-lg font-bold text-white uppercase">Client Roster</h3>
-          <span class="text-xs font-mono text-neutral-400">Showing 4 profiles</span>
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="relative w-full sm:w-64">
+              <input type="text" id="customerSearch" onkeyup="filterCustomers()" placeholder="Search client name..." class="w-full bg-brand-black border border-brand-border rounded-full py-2 pl-9 pr-4 text-xs text-white focus:outline-none focus:border-brand-gold transition-all">
+              <i data-lucide="search" class="w-4 h-4 text-neutral-500 absolute left-3 top-2.5"></i>
+            </div>
+            <span class="shrink-0 text-xs font-mono text-neutral-400">Showing 4 profiles</span>
+          </div>
         </div>
 
         <div class="overflow-x-auto">
@@ -275,7 +326,7 @@
             </div>
           </td>
           <td class="py-3.5">
-            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${c.tier.includes('VIP') ? 'bg-brand-gold/10 text-brand-gold border border-brand-gold/20' : 'bg-neutral-800 text-neutral-400'}">
+            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
               ${c.tier}
             </span>
           </td>
@@ -291,6 +342,76 @@
     }
 
     renderCustomers(customersData);
+
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    function applySavedPreferences() {
+      const html = document.documentElement;
+      const sunIcon = document.getElementById('sunIcon');
+      const moonIcon = document.getElementById('moonIcon');
+      
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        html.classList.remove('dark');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.remove('hidden');
+          moonIcon.classList.add('hidden');
+        }
+      } else {
+        html.classList.add('dark');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.add('hidden');
+          moonIcon.classList.remove('hidden');
+        }
+      }
+
+      const savedDir = localStorage.getItem('dir');
+      if (savedDir === 'rtl') {
+        html.setAttribute('dir', 'rtl');
+      } else {
+        html.setAttribute('dir', 'ltr');
+      }
+    }
+
+    // Apply on load
+    applySavedPreferences();
+
+    // Dark / Light Mode Logic
+    function toggleTheme() {
+      const html = document.documentElement;
+      const sunIcon = document.getElementById('sunIcon');
+      const moonIcon = document.getElementById('moonIcon');
+
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.remove('hidden');
+          moonIcon.classList.add('hidden');
+        }
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.add('hidden');
+          moonIcon.classList.remove('hidden');
+        }
+      }
+    }
+
+    // RTL Layout Toggle Logic
+    function toggleRTL() {
+      const html = document.documentElement;
+      if (html.getAttribute('dir') === 'rtl') {
+        html.setAttribute('dir', 'ltr');
+        localStorage.setItem('dir', 'ltr');
+      } else {
+        html.setAttribute('dir', 'rtl');
+        localStorage.setItem('dir', 'rtl');
+      }
+    }
 
     // LIVE SEARCH FILTER
     function filterCustomers() {
@@ -363,6 +484,58 @@
       sessionStorage.removeItem('adminLoggedIn');
       window.location.href = 'login.html';
     }
+
+    // MOBILE SIDEBAR
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('mobileOverlay');
+      
+      const isClosed = sidebar.classList.contains('-translate-x-full');
+      if (isClosed) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // THEME & RTL
+    function applySavedPreferences() {
+      const isLight = localStorage.getItem('theme') === 'light';
+      const isRTL = localStorage.getItem('dir') === 'rtl';
+
+      if (isLight) {
+        document.documentElement.classList.remove('dark');
+        const themeIcon = document.querySelector('#themeToggle i');
+        if(themeIcon) { themeIcon.setAttribute('data-lucide', 'sun'); lucide.createIcons(); }
+      }
+      if (isRTL) {
+        document.documentElement.setAttribute('dir', 'rtl');
+      }
+    }
+    
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      const isDark = html.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      
+      const themeIcon = document.querySelector('#themeToggle i');
+      if (themeIcon) {
+        themeIcon.setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+        lucide.createIcons();
+      }
+    }
+
+    function toggleRTL() {
+      const html = document.documentElement;
+      const isRTL = html.getAttribute('dir') === 'rtl';
+      html.setAttribute('dir', isRTL ? 'ltr' : 'rtl');
+      localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl');
+    }
+    
+    applySavedPreferences();
   </script>
 </body>
 </html>
