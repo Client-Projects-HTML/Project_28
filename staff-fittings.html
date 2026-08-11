@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fittings Calendar | Staff Portal | Atelier Vogue</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a' /%3E%3Ctext x='50' y='70' font-family='serif' font-size='60' font-weight='bold' fill='%23d4af37' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+  
+  <script>
+    if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 
+            brand: { black: '#0a0a0a', card: '#121212', border: '#222222', gold: '#d4af37', goldHover: '#b89628' } 
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Light Mode Overrides */
+    html:not(.dark) body { background-color: #fcfbf7; color: #1a1a1a; }
+    html:not(.dark) header, html:not(.dark) aside, html:not(.dark) .bg-brand-card {
+      background-color: #ffffff;
+      border-color: #e5e7eb;
+    }
+    html:not(.dark) .text-white { color: #0d0d0d; }
+    html:not(.dark) .text-neutral-100, html:not(.dark) .text-neutral-200 { color: #1a1a1a; }
+    html:not(.dark) .text-neutral-300, html:not(.dark) .text-neutral-400, html:not(.dark) .text-neutral-500 { color: #4a4a4a; }
+    html:not(.dark) .bg-brand-black, html:not(.dark) .bg-black { background-color: #fcfbf7; }
+    html:not(.dark) .bg-neutral-900 { background-color: rgba(212, 175, 55, 0.1); }
+    html:not(.dark) .border-brand-border, html:not(.dark) .border-neutral-800 { border-color: rgba(212, 175, 55, 0.2); }
+    html:not(.dark) .bg-black\/50, html:not(.dark) .bg-black\/80 { background-color: rgba(0,0,0,0.8) !important; }
+    html:not(.dark) .bg-black\/50.text-white, html:not(.dark) .bg-black\/80.text-white { color: #ffffff !important; }
+    html:not(.dark) .admin-slider-container .text-white { color: #ffffff !important; }
+    html:not(.dark) .admin-slider-container .text-neutral-300 { color: #d4d4d4 !important; }
+    html:not(.dark) .admin-slider-container .text-neutral-400 { color: #a3a3a3 !important; }
+    html:not(.dark) .hover\:text-white:hover { color: #d4af37 !important; }
+    html:not(.dark) .hover\:bg-neutral-900:hover { background-color: rgba(212, 175, 55, 0.1) !important; }
+  </style>
+</head>
+<body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex overflow-x-hidden">
+
+  <!-- Mobile Overlay -->
+  <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+  <!-- 1. LEFT SIDEBAR -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-brand-card border-r border-brand-border flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:shrink-0 min-h-screen">
+    <div class="p-6 space-y-8">
+      
+      <!-- Brand Logo & Mobile Close -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10">V</div>
+          <div>
+            <span class="font-serif font-bold text-sm tracking-widest text-white uppercase block leading-none">Atelier Vogue</span>
+            <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider">Staff Portal</span>
+          </div>
+        </div>
+        <button onclick="toggleSidebar()" class="lg:hidden text-neutral-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="flex items-center gap-3 p-3 bg-brand-gold/5 rounded-2xl border border-brand-border">
+        <div class="w-10 h-10 rounded-full bg-brand-gold/20 text-brand-gold border border-brand-gold flex items-center justify-center font-bold text-sm font-serif shrink-0">ST</div>
+        <div class="overflow-hidden">
+          <span class="text-sm font-bold text-white block truncate">Senior Tailor</span>
+          <span class="text-[10px] text-brand-gold font-bold uppercase tracking-wider block truncate flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Master Role</span>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="space-y-2 text-xs font-medium" id="sidebarNav">
+        <a href="staff-dashboard.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Overview</span>
+        </a>
+        <a href="staff-fittings.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-gold text-black font-bold shadow-lg shadow-brand-gold/10 transition-all">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          <span>Fittings Calendar</span>
+        </a>
+        <a href="staff-workorders.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="scissors" class="w-4 h-4"></i>
+          <span>Work Orders</span>
+        </a>
+        <a href="staff-vault.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="layers" class="w-4 h-4"></i>
+          <span>Fabric Vault</span>
+        </a>
+        <a href="staff-clients.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Client Measurements</span>
+        </a>
+        <a href="staff-settings.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+          <span>Profile Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Bottom Logout Action -->
+    <div class="p-6 border-t border-brand-border">
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-neutral-800 hover:border-brand-gold text-neutral-300 hover:text-brand-gold text-xs font-bold uppercase tracking-wider transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 2. MAIN CONTENT AREA -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+    
+    <!-- TOP BAR -->
+    <header class="h-20 border-b border-brand-border px-4 sm:px-8 flex items-center justify-between gap-4 bg-brand-black/80 backdrop-blur-md shrink-0">
+      <!-- Left: Mobile Logo -->
+      <div class="flex items-center">
+        <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10 lg:hidden">V</div>
+      </div>
+
+      <!-- Right: Toggles & Hamburger -->
+      <div class="flex items-center gap-3">
+        <!-- Theme & RTL Toggles -->
+        <div class="flex items-center gap-1.5">
+          <button id="themeToggle" onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold hover:bg-brand-gold hover:text-black transition-all">
+            <i data-lucide="moon" class="w-3.5 h-3.5"></i>
+          </button>
+          <button id="rtlToggle" onclick="toggleRTL()" class="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold hover:bg-brand-gold hover:text-black transition-all">
+            <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+        
+        <!-- Hamburger Menu -->
+        <button onclick="toggleSidebar()" class="lg:hidden text-neutral-400 hover:text-white p-2 rounded-lg hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-colors">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD BODY -->
+    <main class="p-4 sm:p-8 space-y-6 overflow-y-auto flex-1">
+      
+      <!-- Page Header -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <h1 class="font-serif text-2xl font-bold text-white">Fittings Calendar</h1>
+        <button onclick="openModal('fittingModal')" class="w-full sm:w-auto px-4 py-2.5 bg-brand-gold text-black text-xs font-bold rounded-xl shadow-lg shadow-brand-gold/10 hover:bg-brand-goldHover transition-all flex items-center justify-center gap-2 shrink-0">
+          <i data-lucide="plus" class="w-4 h-4"></i> New Fitting
+        </button>
+      </div>
+
+      <!-- Main Layout: Calendar + Side Panel -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        
+        <!-- Left: Calendar Grid -->
+        <div class="xl:col-span-2 bg-brand-card border border-brand-border rounded-3xl p-6 shadow-xl">
+          <!-- Calendar Header Controls -->
+          <div class="flex items-center justify-between mb-4">
+            <h2 id="calendarMonthLabel" class="font-serif text-lg font-bold text-white">August 2026</h2>
+            <div class="flex items-center gap-2">
+              <button onclick="changeMonth(-1)" class="p-2 border border-brand-border rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+              <button onclick="changeMonth(1)" class="p-2 border border-brand-border rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+          
+          <!-- Days of week -->
+          <div class="grid grid-cols-7 gap-2 mb-4">
+            <div class="text-center text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Sun</div>
+            <div class="text-center text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Mon</div>
+            <div class="text-center text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Tue</div>
+            <div class="text-center text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Wed</div>
+            <div class="text-center text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Thu</div>
+            <div class="text-center text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Fri</div>
+            <div class="text-center text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Sat</div>
+          </div>
+          
+          <!-- Calendar Cells -->
+          <div id="calendarGrid" class="grid grid-cols-7 gap-2 sm:gap-3">
+             <!-- JS WILL INJECT CELLS HERE -->
+          </div>
+        </div>
+
+        <!-- Right: Dynamic Schedule Panel -->
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 shadow-xl flex flex-col xl:h-[calc(100vh-200px)]">
+          <div class="flex items-center justify-between mb-6 shrink-0">
+            <div>
+              <h3 id="scheduleDateHeading" class="font-serif text-lg font-bold text-white leading-tight">August 10th</h3>
+              <p class="text-[10px] text-neutral-400 uppercase tracking-wider">Selected Day Schedule</p>
+            </div>
+            <span id="fittingCountBadge" class="text-[10px] font-bold bg-brand-gold/10 text-brand-gold px-3 py-1.5 rounded-xl border border-brand-gold/20">3 Fittings</span>
+          </div>
+          <!-- Dynamically rendered schedule list -->
+          <div id="schedulePanel" class="flex-1 overflow-y-auto pr-1 pb-6"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- New Fitting Modal -->
+  <div id="fittingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden items-center justify-center opacity-0 transition-opacity p-4">
+    <div class="bg-brand-card border border-brand-border rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300">
+      <div class="p-6 border-b border-brand-border flex items-center justify-between bg-brand-gold/5">
+        <h2 class="font-serif text-lg font-bold text-white flex items-center gap-2"><i data-lucide="calendar" class="w-5 h-5 text-brand-gold"></i> Schedule Fitting</h2>
+        <button onclick="closeModal('fittingModal')" class="text-neutral-500 hover:text-white transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="fittingForm" onsubmit="submitFitting(event)" class="p-6 space-y-4">
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Client Name</label>
+          <input id="fittingClient" type="text" required placeholder="e.g. Marcus Vance" class="w-full bg-brand-gold/5 border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Garment / Service</label>
+          <input id="fittingGarment" type="text" required placeholder="e.g. Initial Baste - Peak Lapel Suit" class="w-full bg-brand-gold/5 border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Date</label>
+            <input id="fittingDate" type="date" required class="w-full bg-brand-gold/5 border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Time</label>
+            <input id="fittingTime" type="time" required class="w-full bg-brand-gold/5 border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+          </div>
+        </div>
+        <div class="pt-4 flex gap-3">
+          <button type="button" onclick="closeModal('fittingModal')" class="flex-1 px-4 py-2.5 border border-brand-border text-white text-xs font-bold rounded-xl hover:text-brand-gold hover:border-brand-gold transition-all">Cancel</button>
+          <button type="submit" class="flex-1 px-4 py-2.5 bg-brand-gold text-black text-xs font-bold rounded-xl hover:bg-brand-goldHover transition-all">Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-[100] flex flex-col gap-2"></div>
+
+  <script>
+    lucide.createIcons();
+
+    // ── FITTINGS DATA STORE ──────────────────────────────────────────────────
+    // Key: "YEAR-MONTH(0-indexed)-DAY"
+    const fittingsData = {
+      '2026-7-10': [
+        { time: '10:00 AM', duration: '60 min', client: 'Mr. Arthur Pendelton',   garment: 'Initial Baste - Peak Lapel Suit',             icon: 'scissors'     },
+        { time: '1:30 PM',  duration: '30 min', client: 'Elias Vance',            garment: 'Final Polish - Cashmere Overcoat',             icon: 'check-circle' },
+        { time: '4:00 PM',  duration: '45 min', client: 'Julian Moreau',          garment: 'Secondary Fitting - Tuxedo',                   icon: 'ruler'        }
+      ],
+      '2026-7-14': [
+        { time: '9:00 AM',  duration: '45 min', client: 'Lord Harrison Sterling', garment: 'Initial Drape - Double Breasted Overcoat',     icon: 'scissors'     },
+        { time: '2:00 PM',  duration: '60 min', client: 'Alexander Wright',       garment: 'Final Fitting - Silk Peak-Lapel Suit',         icon: 'check-circle' }
+      ],
+      '2026-7-18': [
+        { time: '11:00 AM', duration: '30 min', client: 'Marcus Vance',           garment: 'Baste Review - Velvet Dinner Jacket',          icon: 'scissors'     }
+      ],
+      '2026-7-21': [
+        { time: '10:30 AM', duration: '60 min', client: 'Julian Thorne',          garment: 'Secondary Baste - Custom Dinner Jacket',       icon: 'ruler'        },
+        { time: '3:00 PM',  duration: '45 min', client: 'Elias Vance',            garment: 'Trouser Adjustment - Cashmere Suit',           icon: 'scissors'     }
+      ],
+      '2026-7-25': [
+        { time: '9:30 AM',  duration: '60 min', client: 'Mr. Arthur Pendelton',   garment: 'Final Delivery Check - Peak Lapel Suit',       icon: 'check-circle' }
+      ]
+    };
+
+    // ── STATE ────────────────────────────────────────────────────────────────
+    const monthNames = ['January','February','March','April','May','June',
+                        'July','August','September','October','November','December'];
+    let currentDate   = new Date(2026, 7, 1);
+    let selectedDay   = 10;
+    let selectedMonth = 7;   // 0-indexed
+    let selectedYear  = 2026;
+
+    const ordinalSuffix = n => {
+      const s = ['th','st','nd','rd'], v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    };
+
+    // ── CALENDAR RENDER ──────────────────────────────────────────────────────
+    function renderCalendar() {
+      const year  = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      document.getElementById('calendarMonthLabel').textContent = `${monthNames[month]} ${year}`;
+
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+
+      const firstDay    = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        grid.innerHTML += `<div class="aspect-square rounded-2xl border border-transparent p-2 sm:p-3 opacity-0 pointer-events-none"></div>`;
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key      = `${year}-${month}-${day}`;
+        const count    = (fittingsData[key] || []).length;
+        const isSel    = (day === selectedDay && month === selectedMonth && year === selectedYear);
+
+        let cellClass, numClass;
+        if (isSel) {
+          cellClass = 'aspect-square rounded-2xl border-2 border-brand-gold bg-brand-gold/15 p-2 sm:p-3 cursor-pointer transition-all flex flex-col justify-between relative overflow-hidden shadow-[inset_0_0_15px_rgba(212,175,55,0.12)]';
+          numClass  = 'text-sm font-bold text-brand-gold';
+        } else {
+          cellClass = 'aspect-square rounded-2xl border border-brand-border bg-brand-gold/5 p-2 sm:p-3 hover:border-brand-gold hover:bg-brand-gold/10 cursor-pointer transition-all flex flex-col justify-between group';
+          numClass  = 'text-sm font-medium text-neutral-400 group-hover:text-brand-gold transition-colors';
+        }
+
+        let dots = '';
+        const dotColors = ['bg-brand-gold','bg-emerald-400','bg-blue-400'];
+        for (let d = 0; d < Math.min(count, 3); d++) {
+          dots += `<div class="w-1.5 h-1.5 rounded-full ${dotColors[d]}"></div>`;
+        }
+        const deco = isSel ? `<div class="absolute top-0 right-0 w-7 h-7 bg-brand-gold/20 rounded-bl-2xl"></div>` : '';
+
+        grid.innerHTML += `
+          <div class="${cellClass}" onclick="selectDay(${day},${month},${year})">
+            ${deco}
+            <span class="${numClass} relative z-10">${day}</span>
+            <div class="flex gap-0.5">${dots}</div>
+          </div>`;
+      }
+    }
+
+    // ── SELECT DAY → updates schedule panel ─────────────────────────────────
+    function selectDay(day, month, year) {
+      selectedDay   = day;
+      selectedMonth = month;
+      selectedYear  = year;
+      renderCalendar();
+      renderSchedule();
+    }
+
+    // ── SCHEDULE PANEL RENDER ────────────────────────────────────────────────
+    function renderSchedule() {
+      const key      = `${selectedYear}-${selectedMonth}-${selectedDay}`;
+      const list     = fittingsData[key] || [];
+      const panel    = document.getElementById('schedulePanel');
+      const heading  = document.getElementById('scheduleDateHeading');
+      const badge    = document.getElementById('fittingCountBadge');
+
+      heading.textContent = `${monthNames[selectedMonth]} ${ordinalSuffix(selectedDay)}`;
+      badge.textContent   = `${list.length} Fitting${list.length !== 1 ? 's' : ''}`;
+
+      if (list.length === 0) {
+        panel.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-44 gap-3 text-center">
+            <div class="w-12 h-12 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold">
+              <i data-lucide="calendar-x" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-white">No Fittings</p>
+              <p class="text-[11px] text-neutral-500 mt-1">Nothing scheduled for this day.</p>
+            </div>
+            <button onclick="openModalForDate(${selectedDay},${selectedMonth},${selectedYear})"
+              class="px-4 py-2 bg-brand-gold/10 border border-brand-gold/20 text-brand-gold text-xs font-bold rounded-xl hover:bg-brand-gold hover:text-black transition-all flex items-center gap-2">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Fitting
+            </button>
+          </div>`;
+        lucide.createIcons();
+        return;
+      }
+
+      panel.innerHTML = list.map((f, idx) => `
+        <div class="flex gap-3 mb-4">
+          <div class="flex flex-col items-center pt-1 shrink-0">
+            <div class="w-3 h-3 rounded-full bg-brand-gold ring-4 ring-brand-gold/20 shrink-0"></div>
+            ${idx < list.length - 1 ? '<div class="w-px flex-1 bg-brand-border mt-1 min-h-[24px]"></div>' : ''}
+          </div>
+          <div class="flex-1 bg-brand-gold/5 border border-brand-border rounded-2xl p-4 hover:border-brand-gold hover:bg-brand-gold/10 transition-all shadow-md cursor-pointer">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-bold text-brand-gold">${f.time}</span>
+              <span class="text-[9px] font-medium text-brand-gold bg-brand-gold/10 px-2 py-1 rounded-lg">${f.duration}</span>
+            </div>
+            <h4 class="text-sm font-bold text-white mb-1">${f.client}</h4>
+            <p class="text-[11px] text-neutral-400 flex items-center gap-1.5">
+              <i data-lucide="${f.icon}" class="w-3.5 h-3.5"></i> ${f.garment}
+            </p>
+          </div>
+        </div>`).join('');
+
+      lucide.createIcons();
+    }
+
+    // ── MONTH NAV ────────────────────────────────────────────────────────────
+    function changeMonth(delta) {
+      currentDate.setMonth(currentDate.getMonth() + delta);
+      renderCalendar();
+    }
+
+    // ── MODAL ────────────────────────────────────────────────────────────────
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        modal.children[0].classList.remove('scale-95');
+      });
+    }
+
+    function openModalForDate(day, month, year) {
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('fittingDate').value = `${year}-${pad(month + 1)}-${pad(day)}`;
+      openModal('fittingModal');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('opacity-0');
+      modal.children[0].classList.add('scale-95');
+      setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+    }
+
+    // ── SUBMIT NEW FITTING ────────────────────────────────────────────────────
+    function submitFitting(e) {
+      e.preventDefault();
+
+      const client  = document.getElementById('fittingClient').value.trim();
+      const garment = document.getElementById('fittingGarment').value.trim();
+      const dateVal = document.getElementById('fittingDate').value;  // "YYYY-MM-DD"
+      const timeVal = document.getElementById('fittingTime').value;  // "HH:MM"
+
+      if (!client || !garment || !dateVal || !timeVal) {
+        showToast('Please fill in all fields.', 'error');
+        return;
+      }
+
+      // Build data key
+      const [y, m, d] = dateVal.split('-').map(Number);
+      const key = `${y}-${m - 1}-${d}`;
+
+      // Format 24h → 12h
+      const [hh, mm] = timeVal.split(':').map(Number);
+      const ampm = hh >= 12 ? 'PM' : 'AM';
+      const h12  = hh % 12 || 12;
+      const timeStr = `${h12}:${String(mm).padStart(2, '0')} ${ampm}`;
+
+      // Push to store
+      if (!fittingsData[key]) fittingsData[key] = [];
+      fittingsData[key].push({ time: timeStr, duration: '60 min', client, garment, icon: 'scissors' });
+
+      // Sort chronologically
+      fittingsData[key].sort((a, b) => {
+        const mins = t => {
+          const [tp, ap] = t.split(' ');
+          let [h, mi]    = tp.split(':').map(Number);
+          if (ap === 'PM' && h !== 12) h += 12;
+          if (ap === 'AM' && h === 12) h = 0;
+          return h * 60 + mi;
+        };
+        return mins(a.time) - mins(b.time);
+      });
+
+      // Navigate to that date
+      selectedDay   = d;
+      selectedMonth = m - 1;
+      selectedYear  = y;
+      currentDate   = new Date(y, m - 1, 1);
+
+      document.getElementById('fittingForm').reset();
+      closeModal('fittingModal');
+      renderCalendar();
+      renderSchedule();
+      showToast(`Fitting scheduled: ${client} on ${monthNames[m-1]} ${ordinalSuffix(d)} at ${timeStr}`);
+    }
+
+    // ── TOAST ─────────────────────────────────────────────────────────────────
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const ok = type === 'success';
+      toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl border ${ok ? 'border-emerald-400/20':'border-red-400/20'} bg-brand-card shadow-xl transform transition-all duration-300 translate-y-10 opacity-0 max-w-sm`;
+      toast.innerHTML = `
+        <div class="w-8 h-8 rounded-full ${ok ? 'bg-emerald-400/10 text-emerald-400':'bg-red-400/10 text-red-400'} flex items-center justify-center shrink-0">
+          <i data-lucide="${ok ? 'check-circle':'alert-circle'}" class="w-4 h-4"></i>
+        </div>
+        <p class="text-xs font-bold text-white flex-1">${message}</p>
+        <button onclick="this.parentElement.remove()" class="text-neutral-500 hover:text-white shrink-0">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+      requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
+      setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-2'); setTimeout(() => toast.remove(), 300); }, 4000);
+    }
+
+    // ── SIDEBAR / THEME / RTL ─────────────────────────────────────────────────
+    function handleLogout() { sessionStorage.removeItem('adminLoggedIn'); window.location.href = 'login.html'; }
+
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar'), ov = document.getElementById('mobileOverlay');
+      const closed = sb.classList.contains('-translate-x-full');
+      closed ? (sb.classList.remove('-translate-x-full'), ov.classList.remove('hidden'))
+             : (sb.classList.add('-translate-x-full'),    ov.classList.add('hidden'));
+    }
+
+    function applySavedPreferences() {
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.classList.remove('dark');
+        const ic = document.querySelector('#themeToggle i');
+        if (ic) { ic.setAttribute('data-lucide','sun'); lucide.createIcons(); }
+      }
+      if (localStorage.getItem('dir') === 'rtl') document.documentElement.setAttribute('dir','rtl');
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      const dark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+      const ic = document.querySelector('#themeToggle i');
+      if (ic) { ic.setAttribute('data-lucide', dark ? 'moon' : 'sun'); lucide.createIcons(); }
+    }
+
+    function toggleRTL() {
+      const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
+      document.documentElement.setAttribute('dir', isRTL ? 'ltr' : 'rtl');
+      localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl');
+    }
+
+    applySavedPreferences();
+
+    // ── INITIAL RENDER ────────────────────────────────────────────────────────
+    renderCalendar();
+    renderSchedule();
+  </script>
+</body>
+</html>

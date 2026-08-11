@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Private Fitting | Atelier Vogue Tailoring Studio</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a' /%3E%3Ctext x='50' y='70' font-family='serif' font-size='60' font-weight='bold' fill='%23d4af37' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
   <meta name="description" content="Schedule a private measurement session, suit fitting, or bridal consultation with Atelier Vogue master tailors.">
 
   <!-- Google Fonts -->
@@ -65,8 +66,14 @@
       background-color: #f4f3ef;
       border-color: #e5e7eb;
     }
-    html:not(.dark) .bg-neutral-900 {
+    html:not(.dark) .bg-brand-black {
+      background-color: #fcfbf7;
+    }
+    html:not(.dark) .bg-neutral-900, html:not(.dark) .bg-neutral-900\/50 {
       background-color: #eae8e1;
+    }
+    html:not(.dark) .border-neutral-800, html:not(.dark) .border-neutral-800\/80 {
+      border-color: #e5e7eb;
     }
     html:not(.dark) input, html:not(.dark) select, html:not(.dark) textarea {
       background-color: #ffffff;
@@ -87,7 +94,7 @@
           <div class="w-9 h-9 border border-brand-gold text-brand-gold flex items-center justify-center rounded-full font-serif font-bold text-base shrink-0">
             V
           </div>
-          <div class="flex flex-col whitespace-nowrap">
+          <div class="hidden sm:flex flex-col whitespace-nowrap">
             <span class="font-serif text-base sm:text-lg font-bold uppercase tracking-widest text-white leading-none">Atelier Vogue</span>
             <span class="text-[8px] tracking-[0.3em] text-brand-gold uppercase font-semibold mt-1">Bespoke Tailoring</span>
           </div>
@@ -98,13 +105,13 @@
           
           <!-- Home Dropdown -->
           <div class="relative group">
-            <button class="flex items-center gap-1.5 text-neutral-300 hover:text-brand-gold focus:outline-none py-2 transition-colors">
+            <button class="flex items-center gap-1.5 text-neutral-300 hover:text-white transition-colors focus:outline-none py-2">
               <span>Home</span>
               <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180"></i>
             </button>
             <div class="absolute left-0 top-full hidden group-hover:block w-52 bg-brand-card border border-neutral-800 rounded-2xl shadow-2xl p-2 space-y-1">
-              <a href="index.html" class="block px-3 py-2 rounded-xl text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 transition-colors">Home 1 (Classic)</a>
-              <a href="index2.html" class="block px-3 py-2 rounded-xl text-xs text-neutral-300 hover:text-white hover:bg-neutral-900 transition-colors">Home 2 (Premium Luxury)</a>
+              <a href="index.html" class="block px-3 py-2 rounded-xl text-xs text-neutral-300 hover:text-brand-gold transition-colors">Home 1 (Classic)</a>
+              <a href="index2.html" class="block px-3 py-2 rounded-xl text-xs text-neutral-300 hover:text-brand-gold transition-colors">Home 2 (Premium Luxury)</a>
             </div>
           </div>
 
@@ -112,7 +119,7 @@
           <a href="booking.html" class="text-brand-gold font-bold py-2 whitespace-nowrap">Book Fitting</a>
           <a href="about.html" class="hover:text-brand-gold transition-colors py-2 whitespace-nowrap">About Us</a>
           <a href="contact.html" class="hover:text-brand-gold transition-colors py-2 whitespace-nowrap">Contact</a>
-          <a href="admin.html" class="hover:text-brand-gold transition-colors text-neutral-400 py-2 whitespace-nowrap">Admin Portal</a>
+
         </nav>
 
         <!-- Right Action Controls -->
@@ -125,7 +132,7 @@
             <i data-lucide="moon" id="moonIcon" class="w-4 h-4"></i>
           </button>
 
-          <!-- RTL Layout Toggle -->
+          <!-- RTL Layout Toggle (Direction Symbol) -->
           <button id="rtlToggle" onclick="toggleRTL()" title="Toggle Right-To-Left Layout" aria-label="Toggle RTL" 
                   class="w-9 h-9 rounded-full border border-neutral-800 bg-neutral-900 flex items-center justify-center text-brand-gold hover:border-brand-gold transition-all shrink-0">
             <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
@@ -136,23 +143,79 @@
             Book Appointment
           </a>
 
+          <!-- Login Button -->
+          <a href="login.html" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-[11px] font-bold uppercase tracking-wider text-brand-gold border border-brand-gold/50 hover:bg-brand-gold hover:text-black rounded-full transition-all whitespace-nowrap shrink-0">
+            LOGIN
+          </a>
+
+          <!-- Mobile Menu Toggle Button -->
+          <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="lg:hidden flex items-center justify-center w-9 h-9 text-brand-gold border border-brand-gold/30 rounded-full bg-brand-gold/10 hover:bg-brand-gold hover:text-black transition-colors focus:outline-none shrink-0 ml-1">
+            <i data-lucide="menu" class="w-4 h-4"></i>
+          </button>
+
         </div>
 
       </div>
     </div>
   </header>
 
+  <!-- MOBILE SIDE MENU -->
+  <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300" onclick="toggleMobileMenu()"></div>
+  <div id="mobileMenuDrawer" class="fixed top-0 left-0 h-full w-72 sm:w-80 bg-brand-card border-r border-neutral-800 z-[70] transform -translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+    
+    <div class="p-6 border-b border-neutral-800 flex justify-between items-center">
+      <span class="font-serif font-bold text-white uppercase tracking-widest text-sm">Menu</span>
+      <button onclick="toggleMobileMenu()" class="text-neutral-400 hover:text-brand-gold transition-colors focus:outline-none">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    
+    <nav class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 text-sm font-semibold uppercase tracking-widest text-neutral-300">
+      
+      <!-- Home Dropdown -->
+      <div>
+        <button onclick="document.getElementById('mobileHomeSub').classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180');" class="w-full flex items-center justify-between hover:text-brand-gold transition-colors focus:outline-none">
+          <span>Home</span>
+          <i data-lucide="chevron-down" class="arrow w-4 h-4 transition-transform duration-200"></i>
+        </button>
+        <div id="mobileHomeSub" class="hidden pl-4 space-y-4 pt-4 border-l border-neutral-800 ml-2 mt-2">
+          <a href="index.html" class="block hover:text-brand-gold transition-colors">Home 1 (Classic)</a>
+          <a href="index2.html" class="block hover:text-brand-gold transition-colors">Home 2 (Luxury)</a>
+        </div>
+      </div>
+      
+      <a href="services.html" class="block hover:text-brand-gold transition-colors">Services & Fabrics</a>
+      <a href="booking.html" class="block hover:text-brand-gold transition-colors">Book Fitting</a>
+      <a href="about.html" class="block hover:text-brand-gold transition-colors">About Us</a>
+      <a href="contact.html" class="block hover:text-brand-gold transition-colors">Contact</a>
+      <a href="help-faq.html" class="block hover:text-brand-gold transition-colors">Help & FAQ</a>
+      <a href="location.html" class="block hover:text-brand-gold transition-colors">Hours & Location</a>
+
+      <div class="pt-6 border-t border-neutral-800 space-y-4">
+        <a href="booking.html" class="block w-full text-center py-3 bg-brand-gold text-black rounded-xl hover:bg-brand-goldHover transition-colors font-bold uppercase tracking-widest text-xs">Book Appointment</a>
+        <a href="login.html" class="block w-full text-center py-3 border border-brand-gold/50 text-brand-gold rounded-xl hover:bg-brand-gold hover:text-black transition-colors font-bold uppercase tracking-widest text-xs">Login</a>
+      </div>
+    </nav>
+  </div>
+
   <!-- HERO HEADER -->
   <section class="pt-36 pb-12 relative overflow-hidden bg-cover bg-center bg-no-repeat"
-           style="background-image: linear-gradient(180deg, rgba(10, 10, 10, 0.88) 0%, rgba(10, 10, 10, 0.98) 100%), url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1920&auto=format&fit=crop');">
+           style="background-image: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1920&auto=format&fit=crop');">
+           
+    <!-- Dark Mode Overlay (Original) -->
+    <div class="absolute inset-0 hidden dark:block" style="background-color: rgba(0, 0, 0, 0.6);"></div>
+
+    <!-- Light Mode Overlay -->
+    <div class="absolute inset-0 block dark:hidden bg-gradient-to-b from-black/40 to-black/60"></div>
+
     <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10 space-y-4">
       <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-brand-gold border border-brand-gold/40 bg-brand-gold/10 px-4 py-1.5 rounded-full inline-block backdrop-blur-sm">
         Private Fitting Session
       </span>
-      <h1 class="font-serif text-4xl sm:text-6xl font-extrabold uppercase tracking-wide text-white">
+      <h1 class="font-serif text-4xl sm:text-6xl font-extrabold uppercase tracking-wide text-white" style="color: #ffffff !important;">
         Reserve Your Appointment
       </h1>
-      <p class="text-neutral-300 text-sm max-w-xl mx-auto font-light leading-relaxed">
+      <p class="text-neutral-300 text-sm max-w-xl mx-auto font-light leading-relaxed" style="color: #e5e5e5 !important;">
         Select your required service, appointment date, and fitting location to meet directly with our senior cutter.
       </p>
     </div>
@@ -322,33 +385,28 @@
         <div class="space-y-3">
           <span class="font-serif text-white font-bold uppercase tracking-wider block">Access Portals</span>
           <ul class="space-y-2">
-            <li><a href="login.html" class="hover:text-brand-gold transition-colors">Client Login</a></li>
             <li><a href="admin.html" class="hover:text-brand-gold transition-colors">Admin Dashboard</a></li>
             <li><a href="contact.html" class="hover:text-brand-gold transition-colors">Support & Contact</a></li>
-            <li><a href="coming-soon.html" class="hover:text-brand-gold transition-colors">Pre-Launch Page</a></li>
-            <li><a href="404.html" class="hover:text-brand-gold transition-colors">404 Error Page</a></li>
           </ul>
         </div>
 
-        <!-- Col 4: Studio Hours -->
+        <!-- Col 4: Customer Support -->
         <div class="space-y-3">
-          <span class="font-serif text-white font-bold uppercase tracking-wider block">Studio Hours</span>
-          <div class="space-y-1.5 text-neutral-400 text-[11px]">
-            <p><strong class="text-white font-normal">Mon - Fri:</strong> 09:00 AM - 07:00 PM</p>
-            <p><strong class="text-white font-normal">Saturday:</strong> 10:00 AM - 05:00 PM</p>
-            <p><strong class="text-white font-normal">Sunday:</strong> By VIP Appointment</p>
-          </div>
+          <span class="font-serif text-white font-bold uppercase tracking-wider block">Customer Support</span>
+          <ul class="space-y-2">
+            <li><a href="help-faq.html" class="hover:text-brand-gold transition-colors">Help & FAQ Center</a></li>
+            <li><a href="location.html" class="hover:text-brand-gold transition-colors">Studio Hours & Location</a></li>
+            <li><a href="404.html" class="hover:text-brand-gold transition-colors">Privacy Policy</a></li>
+            <li><a href="coming-soon.html" class="hover:text-brand-gold transition-colors">Terms of Services</a></li>
+          </ul>
         </div>
 
       </div>
 
       <!-- Copyright Bar -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-neutral-500">
-        <p>&copy; 2026 Atelier Vogue Bespoke Tailoring. All rights reserved.</p>
-        <div class="flex gap-6">
-          <a href="#" class="hover:text-brand-gold transition-colors">Privacy Policy</a>
-          <a href="#" class="hover:text-brand-gold transition-colors">Terms of Fitting</a>
-        </div>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 text-neutral-500 pt-4">
+        <p class="text-center sm:text-left text-[11px] leading-relaxed">&copy; 2026 Atelier Vogue Bespoke Tailoring. All rights reserved.</p>
+        <p class="text-center sm:text-right text-[11px] leading-relaxed">Developed by <span class="text-brand-gold font-semibold">Abhivorn Technologies Pvt. Ltd.</span></p>
       </div>
 
     </div>
@@ -356,7 +414,40 @@
 
   <!-- JAVASCRIPT FOR THEME & RTL CONTROLS -->
   <script>
-    lucide.createIcons();
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    function applySavedPreferences() {
+      const html = document.documentElement;
+      const sunIcon = document.getElementById('sunIcon');
+      const moonIcon = document.getElementById('moonIcon');
+      
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        html.classList.remove('dark');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.remove('hidden');
+          moonIcon.classList.add('hidden');
+        }
+      } else {
+        html.classList.add('dark');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.add('hidden');
+          moonIcon.classList.remove('hidden');
+        }
+      }
+
+      const savedDir = localStorage.getItem('dir');
+      if (savedDir === 'rtl') {
+        html.setAttribute('dir', 'rtl');
+      } else {
+        html.setAttribute('dir', 'ltr');
+      }
+    }
+
+    // Apply on load
+    applySavedPreferences();
 
     // Dark / Light Mode Logic
     function toggleTheme() {
@@ -366,12 +457,18 @@
 
       if (html.classList.contains('dark')) {
         html.classList.remove('dark');
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
+        localStorage.setItem('theme', 'light');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.remove('hidden');
+          moonIcon.classList.add('hidden');
+        }
       } else {
         html.classList.add('dark');
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
+        localStorage.setItem('theme', 'dark');
+        if(sunIcon && moonIcon) {
+          sunIcon.classList.add('hidden');
+          moonIcon.classList.remove('hidden');
+        }
       }
     }
 
@@ -380,8 +477,34 @@
       const html = document.documentElement;
       if (html.getAttribute('dir') === 'rtl') {
         html.setAttribute('dir', 'ltr');
+        localStorage.setItem('dir', 'ltr');
       } else {
         html.setAttribute('dir', 'rtl');
+        localStorage.setItem('dir', 'rtl');
+      }
+    }
+
+    // Mobile Side Menu Logic
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobileMenuDrawer');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const html = document.documentElement;
+
+      if (!drawer) return;
+
+      if (drawer.classList.contains('-translate-x-full')) {
+        drawer.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        void overlay.offsetWidth;
+        overlay.classList.remove('opacity-0');
+        overlay.classList.add('opacity-100');
+        html.classList.add('overflow-hidden');
+      } else {
+        drawer.classList.add('-translate-x-full');
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0');
+        html.classList.remove('overflow-hidden');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
       }
     }
   </script>

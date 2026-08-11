@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard | Atelier Vogue</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a' /%3E%3Ctext x='50' y='70' font-family='serif' font-size='60' font-weight='bold' fill='%23d4af37' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+  
+  <script>
+    if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { 
+            brand: { black: '#0a0a0a', card: '#121212', border: '#222222', gold: '#d4af37', goldHover: '#b89628' } 
+          },
+          fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Light Mode Overrides */
+    html:not(.dark) body { background-color: #fcfbf7; color: #1a1a1a; }
+    html:not(.dark) header, html:not(.dark) aside, html:not(.dark) .bg-brand-card {
+      background-color: #ffffff;
+      border-color: #e5e7eb;
+    }
+    html:not(.dark) .text-white { color: #0d0d0d; }
+    html:not(.dark) .text-neutral-100, html:not(.dark) .text-neutral-200 { color: #1a1a1a; }
+    html:not(.dark) .text-neutral-300, html:not(.dark) .text-neutral-400, html:not(.dark) .text-neutral-500 { color: #4a4a4a; }
+    html:not(.dark) .bg-brand-black, html:not(.dark) .bg-black { background-color: #fcfbf7; }
+    html:not(.dark) .bg-neutral-900 { background-color: rgba(212, 175, 55, 0.1); }
+    html:not(.dark) .border-brand-border, html:not(.dark) .border-neutral-800 { border-color: rgba(212, 175, 55, 0.2); }
+    html:not(.dark) .bg-black\/50, html:not(.dark) .bg-black\/80 { background-color: rgba(0,0,0,0.8) !important; }
+    html:not(.dark) .bg-black\/50.text-white, html:not(.dark) .bg-black\/80.text-white { color: #ffffff !important; }
+    html:not(.dark) .admin-slider-container .text-white { color: #ffffff !important; }
+    html:not(.dark) .admin-slider-container .text-neutral-300 { color: #d4d4d4 !important; }
+    html:not(.dark) .admin-slider-container .text-neutral-400 { color: #a3a3a3 !important; }
+    html:not(.dark) .hover\:text-white:hover { color: #d4af37 !important; }
+    html:not(.dark) .hover\:bg-neutral-900:hover { background-color: rgba(212, 175, 55, 0.1) !important; }
+  </style>
+</head>
+<body class="bg-brand-black text-neutral-100 font-sans min-h-screen flex overflow-x-hidden">
+
+  <!-- Mobile Overlay -->
+  <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+  <!-- 1. LEFT SIDEBAR -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-brand-card border-r border-brand-border flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:shrink-0 min-h-screen">
+    <div class="p-6 space-y-8">
+      
+      <!-- Brand Logo & Mobile Close -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10">V</div>
+          <div>
+            <span class="font-serif font-bold text-sm tracking-widest text-white uppercase block leading-none">Atelier Vogue</span>
+            <span class="text-[9px] font-mono text-brand-gold uppercase tracking-wider">Staff Portal</span>
+          </div>
+        </div>
+        <button onclick="toggleSidebar()" class="lg:hidden text-neutral-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="flex items-center gap-3 p-3 bg-brand-gold/5 rounded-2xl border border-brand-border">
+        <div class="w-10 h-10 rounded-full bg-brand-gold/20 text-brand-gold border border-brand-gold flex items-center justify-center font-bold text-sm font-serif shrink-0">ST</div>
+        <div class="overflow-hidden">
+          <span class="text-sm font-bold text-white block truncate">Senior Tailor</span>
+          <span class="text-[10px] text-brand-gold font-bold uppercase tracking-wider block truncate flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Master Role</span>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="space-y-2 text-xs font-medium" id="sidebarNav">
+        <a href="staff-dashboard.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-brand-gold text-black font-bold shadow-lg shadow-brand-gold/10 transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Overview</span>
+        </a>
+        <a href="staff-fittings.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          <span>Fittings Calendar</span>
+        </a>
+        <a href="staff-workorders.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="scissors" class="w-4 h-4"></i>
+          <span>Work Orders</span>
+        </a>
+        <a href="staff-vault.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="layers" class="w-4 h-4"></i>
+          <span>Fabric Vault</span>
+        </a>
+        <a href="staff-clients.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Client Measurements</span>
+        </a>
+        <a href="staff-settings.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-400 hover:text-brand-gold hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-all">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+          <span>Profile Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Bottom Logout Action -->
+    <div class="p-6 border-t border-brand-border">
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-neutral-800 hover:border-brand-gold text-neutral-300 hover:text-brand-gold text-xs font-bold uppercase tracking-wider transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 2. MAIN CONTENT AREA -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+    
+    <!-- TOP BAR -->
+    <header class="h-20 border-b border-brand-border px-4 sm:px-8 flex items-center justify-between gap-4 bg-brand-black/80 backdrop-blur-md shrink-0">
+      <!-- Left: Mobile Logo -->
+      <div class="flex items-center">
+        <div class="w-10 h-10 border border-brand-gold text-brand-gold flex items-center justify-center rounded-2xl font-serif font-bold text-xl bg-brand-gold/10 lg:hidden">V</div>
+      </div>
+
+      <!-- Right: Toggles & Hamburger -->
+      <div class="flex items-center gap-3">
+        <!-- Theme & RTL Toggles -->
+        <div class="flex items-center gap-1.5">
+          <button id="themeToggle" onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold hover:bg-brand-gold hover:text-black transition-all">
+            <i data-lucide="moon" class="w-3.5 h-3.5"></i>
+          </button>
+          <button id="rtlToggle" onclick="toggleRTL()" class="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold hover:bg-brand-gold hover:text-black transition-all">
+            <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+        
+        <!-- Hamburger Menu -->
+        <button onclick="toggleSidebar()" class="lg:hidden text-neutral-400 hover:text-white p-2 rounded-lg hover:bg-brand-gold/10 hover:border-brand-gold/20 border border-transparent transition-colors">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD BODY -->
+    <main class="p-4 sm:p-8 space-y-8 overflow-y-auto flex-1">
+      <div class="mb-2">
+        <h1 class="font-serif text-2xl font-bold text-white">Overview</h1>
+        <p class="text-xs text-neutral-400 mt-1">Welcome back, Master Cutter</p>
+      </div>
+
+      <!-- METRIC CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="bg-brand-card border border-brand-border rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">4</span>
+            <span class="text-[10px] sm:text-xs text-neutral-400 uppercase tracking-wider font-medium">Fittings Today</span>
+          </div>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-brand-gold/10 text-brand-gold flex items-center justify-center">
+            <i data-lucide="calendar-check" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <div class="bg-brand-card border border-brand-border rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">12</span>
+            <span class="text-[10px] sm:text-xs text-neutral-400 uppercase tracking-wider font-medium">Active Tasks</span>
+          </div>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-brand-gold text-black flex items-center justify-center">
+            <i data-lucide="scissors" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <div class="bg-brand-card border border-brand-border rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">3</span>
+            <span class="text-[10px] sm:text-xs text-neutral-400 uppercase tracking-wider font-medium">Urgent Edits</span>
+          </div>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-red-500/10 text-red-500 border border-red-500/20 flex items-center justify-center">
+            <i data-lucide="alert-circle" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <div class="bg-brand-card border border-brand-border rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex items-center justify-between shadow-xl">
+          <div>
+            <span class="text-2xl font-bold font-serif text-white block">98%</span>
+            <span class="text-[10px] sm:text-xs text-neutral-400 uppercase tracking-wider font-medium">Fabric Stock</span>
+          </div>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-brand-gold/10 text-brand-gold flex items-center justify-center">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT TABLES -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- Task List -->
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 shadow-xl overflow-hidden">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-serif text-lg font-bold text-white">My Work Orders</h2>
+            <a href="staff-workorders.html" class="text-xs text-brand-gold hover:text-white transition-colors font-bold uppercase tracking-wider">View All</a>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 rounded-2xl bg-neutral-900 border border-brand-border">
+              <div class="flex items-center gap-4">
+                <div class="w-2 h-2 rounded-full bg-brand-gold"></div>
+                <div>
+                  <p class="text-sm font-bold text-white truncate max-w-[150px] sm:max-w-none">#WO-204 - Tuxedo Jacket</p>
+                  <p class="text-xs text-neutral-400 truncate max-w-[150px] sm:max-w-none">Client: James Smith • Step: Canvas Basting</p>
+                </div>
+              </div>
+              <button class="px-3 py-1.5 bg-brand-gold text-black text-[10px] font-bold rounded-lg uppercase hidden sm:block">Action</button>
+            </div>
+            <div class="flex items-center justify-between p-4 rounded-2xl bg-neutral-900 border border-brand-border">
+              <div class="flex items-center gap-4">
+                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                <div>
+                  <p class="text-sm font-bold text-white truncate max-w-[150px] sm:max-w-none">#WO-198 - Silk Blouse</p>
+                  <p class="text-xs text-neutral-400 truncate max-w-[150px] sm:max-w-none">Client: Emma Doe • Step: Final Hemming</p>
+                </div>
+              </div>
+              <button class="px-3 py-1.5 bg-brand-gold text-black text-[10px] font-bold rounded-lg uppercase hidden sm:block">Action</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Fittings -->
+        <div class="bg-brand-card border border-brand-border rounded-3xl p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="font-serif text-lg font-bold text-white">Today's Fittings</h2>
+            <a href="staff-fittings.html" class="p-2 bg-brand-gold/10 text-brand-gold rounded-xl hover:bg-brand-gold hover:text-black transition-colors tooltip relative group">
+              <i data-lucide="calendar" class="w-4 h-4"></i>
+              <span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Full Calendar</span>
+            </a>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4 p-4 rounded-2xl border border-brand-border hover:border-brand-gold/50 transition-colors">
+              <div class="text-center shrink-0 w-12 sm:w-16">
+                <span class="block text-brand-gold font-bold text-sm sm:text-base">10:00</span>
+                <span class="text-[10px] text-neutral-400 uppercase">AM</span>
+              </div>
+              <div class="w-px h-8 bg-brand-border hidden sm:block"></div>
+              <div>
+                <p class="text-sm font-bold text-white">Initial Measurement</p>
+                <p class="text-xs text-neutral-400">Client: Richard Roe (Bespoke Suit)</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 p-4 rounded-2xl border border-brand-border hover:border-brand-gold/50 transition-colors">
+              <div class="text-center shrink-0 w-12 sm:w-16">
+                <span class="block text-brand-gold font-bold text-sm sm:text-base">02:30</span>
+                <span class="text-[10px] text-neutral-400 uppercase">PM</span>
+              </div>
+              <div class="w-px h-8 bg-brand-border hidden sm:block"></div>
+              <div>
+                <p class="text-sm font-bold text-white">Second Fitting</p>
+                <p class="text-xs text-neutral-400">Client: Jane Austen (Bridal Gown)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-[100] flex flex-col gap-2"></div>
+
+  <script>
+    lucide.createIcons();
+
+    // Toast Notification System
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      const isSuccess = type === 'success';
+      const icon = isSuccess ? 'check-circle' : 'alert-circle';
+      const color = isSuccess ? 'text-green-400' : 'text-red-400';
+      const border = isSuccess ? 'border-green-400/20' : 'border-red-400/20';
+      const bg = isSuccess ? 'bg-green-400/10' : 'bg-red-400/10';
+
+      toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl border ${border} bg-brand-card shadow-lg transform transition-all duration-300 translate-y-10 opacity-0`;
+      
+      toast.innerHTML = `
+        <div class="flex-shrink-0 w-8 h-8 rounded-full ${bg} ${color} flex items-center justify-center">
+          <i data-lucide="${icon}" class="w-4 h-4"></i>
+        </div>
+        <p class="text-sm font-bold text-white">${message}</p>
+        <button onclick="this.parentElement.remove()" class="ml-2 text-neutral-500 hover:text-white transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      `;
+
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      // Animate in
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-10', 'opacity-0');
+      });
+
+      // Remove after 3 seconds
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // Sidebar Toggle Logic for Mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('mobileOverlay');
+      
+      const isClosed = sidebar.classList.contains('-translate-x-full');
+      if (isClosed) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Global Theme and RTL support
+    function applySavedPreferences() {
+      const isLight = localStorage.getItem('theme') === 'light';
+      const isRTL = localStorage.getItem('dir') === 'rtl';
+
+      if (isLight) {
+        document.documentElement.classList.remove('dark');
+        const themeIcon = document.querySelector('#themeToggle i');
+        if(themeIcon) { themeIcon.setAttribute('data-lucide', 'sun'); lucide.createIcons(); }
+      }
+      if (isRTL) {
+        document.documentElement.setAttribute('dir', 'rtl');
+      }
+    }
+    
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      const isDark = html.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      
+      const themeIcon = document.querySelector('#themeToggle i');
+      if (themeIcon) {
+        themeIcon.setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+        lucide.createIcons();
+      }
+    }
+
+    function toggleRTL() {
+      const html = document.documentElement;
+      const isRTL = html.getAttribute('dir') === 'rtl';
+      html.setAttribute('dir', isRTL ? 'ltr' : 'rtl');
+      localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl');
+    }
+    
+    applySavedPreferences();
+  </script>
+</body>
+</html>
